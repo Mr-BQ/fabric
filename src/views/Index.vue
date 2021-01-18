@@ -2,7 +2,23 @@
   <div class="index">
     <el-container>
       <el-header class="header">
-        header
+        <el-row>
+          <el-col :span="1">
+            header
+          </el-col>
+          <el-col :span="1" :offset="20">
+            <el-avatar :size="50" :src="circleUrl" class="avatar"></el-avatar>
+          </el-col>
+          <el-col :span="1">
+            <el-dropdown placement="bottom-start">
+              <i class="el-icon-circle-plus-outline" style="font-size: 25px;line-height: 60px;cursor: pointer;color:#fff;"></i>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item>profile</el-dropdown-item>
+                <el-dropdown-item>log out</el-dropdown-item>
+              </el-dropdown-menu>
+            </el-dropdown>
+          </el-col>
+        </el-row>
       </el-header>
       <el-container>
         <el-aside>
@@ -33,7 +49,7 @@
               <i class="el-icon-menu"></i>
               <span slot="title">生成模板</span>
             </el-menu-item>
-            <el-menu-item index="3" disabled>
+            <el-menu-item index="3">
               <i class="el-icon-document"></i>
               <span slot="title">导航三</span>
             </el-menu-item>
@@ -44,6 +60,15 @@
           </el-menu>
         </el-aside>
         <el-main>
+          <el-tabs v-model="editableTabsValue" type="card" closable @edit="handleTabsEdit">
+            <el-tab-pane
+                :key="item.name"
+                v-for="item in editableTabs"
+                :label="item.title"
+                :name="item.name"
+            >
+            </el-tab-pane>
+          </el-tabs>
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -55,12 +80,55 @@
 <script>
 export default {
   name: "Index",
+  data() {
+    return {
+      editableTabsValue: '1',
+      editableTabs: [{
+        title: '生成模板',
+        name: '1',
+        content: ''
+      }],
+      tabIndex: 1,
+      circleUrl:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+    }
+  },
   methods: {
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
     handleClose(key, keyPath) {
       console.log(key, keyPath);
+    },
+    handleTabsEdit(targetName, action) {
+      if (action === 'add') {
+        let newTabName = ++this.tabIndex + '';
+        this.editableTabs.push({
+          title: 'New Tab',
+          name: newTabName,
+          content: 'New Tab content'
+        });
+        this.editableTabsValue = newTabName;
+      }
+      if (action === 'remove') {
+        let tabs = this.editableTabs;
+        let activeName = this.editableTabsValue;
+        if (activeName === targetName) {
+          tabs.forEach((tab, index) => {
+            if (tab.name === targetName) {
+              let nextTab = tabs[index + 1] || tabs[index - 1];
+              if (nextTab) {
+                activeName = nextTab.name;
+              }
+            }
+          });
+        }
+
+        this.editableTabsValue = activeName;
+        this.editableTabs = tabs.filter(tab => tab.name !== targetName);
+      }
+    },
+    more(){
+
     }
   }
 }
@@ -71,7 +139,9 @@ export default {
    background-color: #34495e;
    color:#ecf0f1;
    line-height: 60px;
-   text-align: center;
+   .avatar{
+     margin-top: 4px;
+   }
  }
  .el-main{
    color: black;

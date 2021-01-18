@@ -18,7 +18,7 @@
      <el-col :span="12" :offset="4">
        <el-table
            :data="table"
-           height="400"
+           height="350"
            border
            style="width: 100%">
          <el-table-column

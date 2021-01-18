@@ -9,6 +9,10 @@ const routes = [
     redirect:"/index"
   },
   {
+    path:'/login',
+    component: () => import('@/views/Login')
+  },
+  {
     path: '/index',
     name: 'Index',
     children:[
