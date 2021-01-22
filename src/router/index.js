@@ -24,6 +24,11 @@ const routes = [
         path:'/newtemplate',
         name:'NewTemplate',
         component:() => import('@/views/template/NewTemplate')
+      },
+      {
+        path:'/newinstance',
+        name:'NewInstance',
+        component:() => import('@/views/template/NewInstance')
       }
     ],
     // route level code-splitting
