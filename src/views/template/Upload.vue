@@ -60,7 +60,8 @@
   </div>
   <div class="right" v-if="preview!=''">
     <div>{{preview.type === 'template'?'模板':'实例'}}{{preview.name}}</div>
-    <pre>{{preview}}</pre>
+    <json-viewer :value="preview" :expand-depth=6 boxed></json-viewer>
+<!--    <pre>{{preview}}</pre>-->
   </div>
 </div>
 </template>
@@ -126,12 +127,12 @@ export default {
   display: flex;
   .left{
     width: 40%;
-    border:1px solid black;
+    //border:1px solid black;
   }
   .right{
     font-size: 15px;
     width: 50%;
-    border:1px solid black;
+    //border:1px solid black;
     padding: 0 10px;
     pre{
       font-family: "Microsoft JhengHei";

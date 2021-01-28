@@ -29,11 +29,11 @@
           <el-date-picker v-model="item.value" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" v-if="item.type==='date'"></el-date-picker>
           <el-input-number v-model="item.value" :precision="0" v-if="item.type==='int'" ></el-input-number>
           <el-input-number v-model="item.value" :precision="6" v-if="item.type==='float'" ></el-input-number>
-          <div v-if="item.type==='object'" class="selectobj">
+          <div v-if="item.type==='object'" class="selectobj" style="border-bottom: none;">
             <select v-model="item.value"  class="select">
-              <option v-for="(instance) in instances" :key="instance.name" :label="instance.name" :value="instance.data"></option>
+              <option v-for="(instance) in $store.state.instances" :key="instance.name" :label="instance.name" :value="instance.data"></option>
             </select>
-            <span v-if="item.value.length!=0">{{item.value}}</span>
+            <json-viewer :value="item.value" v-if="item.value.length!=0" :expand-depth=6 boxed class="viewer"></json-viewer>
           </div>
 
           <el-form v-if="item.type==='array'">
@@ -45,9 +45,9 @@
                 <el-input-number v-model="item.value[idx-1]" :precision="6" v-if="item.arraytype==='float'" ></el-input-number>
                 <div v-if="item.arraytype==='object'" class="selectobj">
                   <select v-model="item.value[idx-1]" class="select" >
-                    <option v-for="(instance) in instances" :key="instance.name" :label="instance.name" :value="instance.data"></option>
+                    <option v-for="(instance) in $store.state.instances" :key="instance.name" :label="instance.name" :value="instance.data"></option>
                   </select>
-                  <span v-if="item.value[idx-1].length!=0">{{item.value[idx-1]}}</span>
+                  <json-viewer :value="item.value[idx-1]" v-if="item.value[idx-1].length!=0" :expand-depth=6 boxed class="viewer"></json-viewer>
                   <div>
                     <el-button type="danger" icon="el-icon-delete" circle v-if="item.arraylength==='max'"
                                style="margin-left: 10px;" size="small" @click="remove(index,idx-1)"></el-button>
@@ -83,7 +83,6 @@ export default {
       rules:{},
       filling:'',
       instanceName:'',
-      instances:[]
     }
   },
   computed:{
@@ -99,7 +98,6 @@ export default {
       this.$router.replace('/upload')
     },
     loadForm(){
-      this.instances.push(...this.$store.state.instances)
       this.instanceName = ''
       this.filling = this.templateName
       this.Form = []
@@ -192,15 +190,15 @@ export default {
 
 .selectobj{
   display: flex;
-  //border:1px solid black;
+  border-bottom:2px solid grey;
+  padding-bottom: 10px;
+  width: 600px;
   .select{
     font-size: 20px;
     height: 40px;
   }
-  span{
-    border: 1px solid black;
-    line-height: 25px;
-    margin-left: 15px;
+  .viewer{
+    margin-left: 20px;
   }
 
 }
