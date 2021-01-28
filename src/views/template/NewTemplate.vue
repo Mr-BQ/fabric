@@ -153,7 +153,12 @@ export default {
         if(valid){
           if(this.table.length !== 0){
             //生成json文件
-            let content = JSON.stringify(this.table)
+            let obj = {
+              name:this.form.templateName,
+              type:'template',
+              data:this.table
+            }
+            let content = JSON.stringify(obj)
             let blob = new Blob([content],{type: "text/plain;charset=utf-8"})
             FileSaver.saveAs(blob,this.form.templateName +'.json')
             return
@@ -220,7 +225,7 @@ export default {
       this.dialogform.datatype = row.datatype.indexOf('[') === -1 ? datatype : 'array'
       this.dialogform.arraytype = this.dialogform.datatype === 'array'? datatype : ''
       this.dialogform.lengthtype = this.dialogform.datatype === 'array' ? (row.datatype.indexOf('[]') === -1 ? 'limited' : 'unlimited') : ''
-      this.dialogform.arraylength = this.dialogform.datatype === 'array' && this.dialogform.lengthtype === 'limited'? (row.datatype[row.datatype.indexOf('[') + 1] * 1) : ''
+      this.dialogform.arraylength = this.dialogform.datatype === 'array' && this.dialogform.lengthtype === 'limited'? (row.datatype.slice(row.datatype.indexOf('[')+1,row.datatype.indexOf(']')) * 1) : ''
       this.updating = true
       this.updatingIndex = index
       this.dialogFormVisible = true

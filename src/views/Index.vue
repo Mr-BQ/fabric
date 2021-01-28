@@ -52,11 +52,11 @@
             </el-menu-item>
             <el-menu-item index="3" >
               <i class="el-icon-document"></i>
-              <span slot="title">生成实例</span>
+              <span slot="title">上传模板或实例</span>
             </el-menu-item>
             <el-menu-item index="4">
               <i class="el-icon-setting"></i>
-              <span slot="title">导航四</span>
+              <span slot="title">生成实例</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
@@ -83,14 +83,11 @@ export default {
   name: "Index",
   data() {
     return {
-      editableTabsValue: '1',
-      editableTabs: [{
-        title: '生成模板',
-        name: '1',
-        content: ''
-      }],
-      tabIndex: 1,
+      editableTabsValue: '',
+      editableTabs: [],
+      tabIndex: 0,
       circleUrl:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+      templates:[]
     }
   },
   methods: {
@@ -104,9 +101,9 @@ export default {
       if (action === 'add') {
         let newTabName = ++this.tabIndex + '';
         this.editableTabs.push({
-          title: 'New Tab',
+          title: targetName,
           name: newTabName,
-          content: 'New Tab content'
+          content: ''
         });
         this.editableTabsValue = newTabName;
       }
@@ -129,7 +126,13 @@ export default {
       }
     },
     menuClick(key){
-      console.log('-----' + key +'-----')
+      if(key == 2){
+        this.$router.replace('/newtemplate')
+      }else if(key == 3){
+        this.$router.replace('/upload')
+      }else if(key == 4){
+        this.$router.replace('/newinstance')
+      }
     }
   }
 }

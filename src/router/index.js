@@ -26,9 +26,14 @@ const routes = [
         component:() => import('@/views/template/NewTemplate')
       },
       {
+        path:'/upload',
+        name:'upload',
+        component:() => import('@/views/template/Upload')
+      },
+      {
         path:'/newinstance',
-        name:'NewInstance',
-        component:() => import('@/views/template/NewInstance')
+        name:'newinstance',
+        component:()=>import('@/views/template/NewInstance')
       }
     ],
     // route level code-splitting
