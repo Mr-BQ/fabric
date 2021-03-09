@@ -34,6 +34,11 @@ const routes = [
         path:'/newinstance',
         name:'newinstance',
         component:()=>import('@/views/template/NewInstance')
+      },
+      {
+        path:'/buildnetwork',
+        name:'buildnetwork',
+        component:()=>import('@/views/template/BuildNetwork')
       }
     ],
     // route level code-splitting
