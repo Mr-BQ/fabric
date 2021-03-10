@@ -25,9 +25,14 @@
           <el-menu
               default-active="2"
               class="el-menu-vertical-demo"
+              text-color="#fff"
+              active-text-color="#ffd04b"
+              background-color="#545c64"
               @open="handleOpen"
               @close="handleClose"
-              @select="menuClick">
+              @select="menuClick"
+              :router=true
+              style="height: 800px;">
             <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-location"></i>
@@ -46,17 +51,21 @@
                 <el-menu-item index="1-4-1">选项1</el-menu-item>
               </el-submenu>
             </el-submenu>
-            <el-menu-item index="2">
+            <el-menu-item index="/newtemplate">
               <i class="el-icon-menu"></i>
               <span slot="title">生成模板</span>
             </el-menu-item>
-            <el-menu-item index="3" >
+            <el-menu-item index="/upload" >
               <i class="el-icon-document"></i>
               <span slot="title">上传模板或实例</span>
             </el-menu-item>
-            <el-menu-item index="4">
+            <el-menu-item index="/newinstance">
               <i class="el-icon-setting"></i>
               <span slot="title">生成实例</span>
+            </el-menu-item>
+            <el-menu-item index="/buildnetwork">
+              <i class="el-icon-setting"></i>
+              <span slot="title">建立网络</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
@@ -125,14 +134,14 @@ export default {
         this.editableTabs = tabs.filter(tab => tab.name !== targetName);
       }
     },
-    menuClick(key){
-      if(key == 2){
-        this.$router.replace('/newtemplate')
-      }else if(key == 3){
-        this.$router.replace('/upload')
-      }else if(key == 4){
-        this.$router.replace('/newinstance')
-      }
+    menuClick(){
+      // if(key == 2){
+      //   this.$router.replace('/newtemplate')
+      // }else if(key == 3){
+      //   this.$router.replace('/upload')
+      // }else if(key == 4){
+      //   this.$router.replace('/newinstance')
+      // }
     }
   }
 }
