@@ -12,6 +12,9 @@
         </el-select>
       </div>
       <div class="formitem">
+        <label>CA服务器端口：</label><el-input v-model="org.caPort" placeholder="CA服务器端口"></el-input>
+      </div>
+      <div class="formitem">
         <label>节点信息：</label>
         <div class="btn" @click="addnode(index)">新增节点</div>
       </div>
@@ -65,11 +68,11 @@ export default {
     align-items: center;
     margin-bottom: 20px;
     label{
-      width: 6rem;
+      width: 8rem;
       text-align: center;
     }
     .el-input{
-      width: 50%;
+      width: 40%;
     }
   }
   .btn{

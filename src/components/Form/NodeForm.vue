@@ -11,6 +11,9 @@
         <el-option label="peer node" value="peer"></el-option>
       </el-select>
     </div>
+    <div class="formitem">
+      <label>端口：</label><el-input v-model="node.port" placeholder="节点端口"></el-input>
+    </div>
   </div>
 </template>
 

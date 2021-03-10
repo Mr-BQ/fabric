@@ -10,12 +10,15 @@
           <i class="el-icon-plus" style="font-size: 20px;font-weight: bold;margin-right: 10px"></i>点击新建组织
         </div>
       </div>
+      <div class="orgform">
+        <org-form v-for="(item,index) in orgs" :key="index" :org="item" :index="index" @addnode="addnode">
+          <node-form v-for="(node,idx) in orgs[index].nodes" :key="idx" :node="node" :index="idx" slot="nodeform"></node-form>
+        </org-form>
+      </div>
     </div>
-    <div class="orgform">
-      <org-form v-for="(item,index) in orgs" :key="index" :org="item" :index="index" @addnode="addnode">
-        <node-form v-for="(node,idx) in orgs[index].nodes" :key="idx" :node="node" :index="idx" slot="nodeform"></node-form>
-      </org-form>
-    </div>
+
+    <div class="btn" @click="genNet">生成网络</div>
+
 
 
 
@@ -26,6 +29,7 @@
 import {Org,Node} from "@/entity";
 import OrgForm from "@/components/Form/OrgForm";
 import NodeForm from "@/components/Form/NodeForm";
+import axios from 'axios'
 export default {
 name: "BuildNetwork",
   data(){
@@ -40,6 +44,20 @@ name: "BuildNetwork",
     },
     addnode(index){
       this.orgs[index].nodes.push(new Node())
+    },
+    genNet(){
+      console.log(this.orgs);
+      let instance = axios.create()
+      instance({
+        method:'post',
+        url:'http://localhost:8888/sendJson',
+        data:{
+          name:this.network,
+          orgs:this.orgs
+        }
+      }).then(res=>{
+        console.log(res);
+      })
     }
   },
   components:{
@@ -66,22 +84,22 @@ name: "BuildNetwork",
         width: 50%;
       }
     }
-    .btn{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 9rem;
-      cursor: pointer;
-      background-color: #3498db;
-      border-radius: 6px;
-      height: 3rem;
-      width: 10rem;
-      justify-content: center;
-      color: #fff;
-      &:hover{
-        color:#eee;
-        background-color: #74b9ff;
-      }
+  }
+  .btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 9rem;
+    cursor: pointer;
+    background-color: #3498db;
+    border-radius: 6px;
+    height: 3rem;
+    width: 10rem;
+    justify-content: center;
+    color: #fff;
+    &:hover{
+      color:#eee;
+      background-color: #74b9ff;
     }
   }
 
