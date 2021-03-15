@@ -4,6 +4,7 @@
     <div class="form">
       <div class="formitem">
         <label>网络名：</label><el-input v-model="network" placeholder="网络名"></el-input>
+        <div class="btn" @click="genNet">生成网络</div>
       </div>
       <div class="formitem">
         <div class="btn" @click="addorg">
@@ -11,13 +12,26 @@
         </div>
       </div>
       <div class="orgform">
-        <org-form v-for="(item,index) in orgs" :key="index" :org="item" :index="index" @addnode="addnode">
-          <node-form v-for="(node,idx) in orgs[index].nodes" :key="idx" :node="node" :index="idx" slot="nodeform"></node-form>
-        </org-form>
+        <el-collapse>
+          <el-collapse-item v-for="(item,index) in orgs" :key="index" :title="'组织'+ (index+1)" style="height: 100%">
+            <org-form :org="item" :index="index" @addnode="addnode">
+
+              <div slot="nodeform">
+                <el-collapse>
+                  <el-collapse-item v-for="(node,idx) in orgs[index].nodes" :key="idx" :title="'节点'+ (idx+1)">
+                    <node-form :node="node" :index="idx" :append="item.name"></node-form>
+                  </el-collapse-item>
+                </el-collapse>
+              </div>
+
+
+            </org-form>
+          </el-collapse-item>
+        </el-collapse>
       </div>
     </div>
 
-    <div class="btn" @click="genNet">生成网络</div>
+
 
 
 
@@ -97,6 +111,7 @@ name: "BuildNetwork",
     width: 10rem;
     justify-content: center;
     color: #fff;
+    margin-left: 2rem;
     &:hover{
       color:#eee;
       background-color: #74b9ff;

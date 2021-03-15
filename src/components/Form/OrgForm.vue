@@ -1,8 +1,9 @@
 <template>
     <div class="org">
-      <div class="title">组织{{index+1}}</div>
+<!--      <div class="title">组织{{index+1}}</div>-->
       <div class="formitem">
-        <label>组织名：</label><el-input v-model="org.name" placeholder="组织名"></el-input>
+        <label>组织名：</label>
+        <el-input v-model="org.name" placeholder="组织名"></el-input>
       </div>
       <div class="formitem">
         <label>组织类型：</label>
@@ -49,7 +50,6 @@ export default {
 
 <style scoped lang="less">
   .org{
-    margin-bottom: 3rem;
     .title{
       font-size: 1.2rem;
       margin-bottom: 1rem;

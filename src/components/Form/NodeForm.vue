@@ -1,8 +1,11 @@
 <template>
   <div class="node-form">
-    <div class="title">节点{{index+1}}</div>
+<!--    <div class="title">节点{{index+1}}</div>-->
     <div class="formitem">
-      <label>节点名：</label><el-input v-model="node.name" placeholder="节点名"></el-input>
+      <label>节点名：</label>
+      <el-input v-model="node.name" placeholder="节点名">
+        <template slot="append">{{'.'+append+'.com'}}</template>
+      </el-input>
     </div>
     <div class="formitem">
       <label>节点类型：</label>
@@ -11,9 +14,9 @@
         <el-option label="peer node" value="peer"></el-option>
       </el-select>
     </div>
-    <div class="formitem">
-      <label>端口：</label><el-input v-model="node.port" placeholder="节点端口"></el-input>
-    </div>
+<!--    <div class="formitem">-->
+<!--      <label>端口：</label><el-input v-model="node.port" placeholder="节点端口"></el-input>-->
+<!--    </div>-->
   </div>
 </template>
 
@@ -30,6 +33,10 @@ export default {
     index:{
       type:Number,
       default:-1
+    },
+    append:{
+      type:String,
+      default:''
     }
   }
 }
