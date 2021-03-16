@@ -4,7 +4,7 @@
     <div class="formitem">
       <label>节点名：</label>
       <el-input v-model="node.name" placeholder="节点名">
-        <template slot="append">{{'.'+append+'.com'}}</template>
+        <template slot="append">{{node.type=='orderer'?'.'+append+'.ordererorg':'.'+append+'.com'}}</template>
       </el-input>
     </div>
     <div class="formitem">

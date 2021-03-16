@@ -158,6 +158,7 @@ export default {
  }
  .el-main{
    color: black;
+   padding-bottom: 10rem;
  }
 
 

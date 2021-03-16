@@ -5,15 +5,17 @@
         <label>组织名：</label>
         <el-input v-model="org.name" placeholder="组织名"></el-input>
       </div>
+<!--      <div class="formitem">-->
+<!--        <label>组织类型：</label>-->
+<!--        <el-select v-model="org.type" placeholder="请选择组织类型">-->
+<!--          <el-option label="Orderer Organization" value="Orderer"></el-option>-->
+<!--          <el-option label="Peer Organization" value="Peer"></el-option>-->
+<!--        </el-select>-->
+<!--      </div>-->
       <div class="formitem">
-        <label>组织类型：</label>
-        <el-select v-model="org.type" placeholder="请选择组织类型">
-          <el-option label="Orderer Organization" value="Orderer"></el-option>
-          <el-option label="Peer Organization" value="Peer"></el-option>
-        </el-select>
-      </div>
-      <div class="formitem">
-        <label>CA服务器端口：</label><el-input v-model="org.caPort" placeholder="CA服务器端口"></el-input>
+        <label>配置CA服务器：</label>
+        <el-radio v-model="org.hasCa" :label=true>是</el-radio>
+        <el-radio v-model="org.hasCa" :label=false>否</el-radio>
       </div>
       <div class="formitem">
         <label>节点信息：</label>
@@ -23,6 +25,7 @@
         <slot name="nodeform"></slot>
       </div>
     </div>
+
 </template>
 
 <script>
