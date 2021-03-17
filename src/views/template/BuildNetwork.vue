@@ -43,15 +43,15 @@
         title="确认网络信息"
         :visible.sync="dialogVisible"
         width="30%">
-      <h3>根据你填写的内容，得到以下网络信息，请确认组织、节点、CA服务器等内容是否有误。</h3>
+      <h3 v-if="treedata.length!==0">根据你填写的内容，得到以下网络信息，请确认组织、节点、CA服务器等内容是否有误。</h3>
       <div>
-        <div class="formitem">
+        <div class="formitem" style="margin:1rem 0 .5rem;font-size: 1rem" v-if="treedata.length!==0">
         <label>网络名：</label><span>{{network}}</span>
       </div>
         <el-tree :data="treedata" :default-expand-all="true"></el-tree></div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返回修改</el-button>
-        <el-button type="primary" @click="dialogVisible = false">生成网络</el-button>
+        <el-button type="primary" @click="genNet">生成网络</el-button>
       </span>
     </el-dialog>
 
@@ -72,7 +72,10 @@ name: "BuildNetwork",
     network:'',
     orgs:[],
     dialogVisible:false,
-    treedata:[]
+    treedata:[],
+    cas:[],
+    peers:[],
+    orderers:[]
   }
   },
   methods:{
@@ -89,29 +92,47 @@ name: "BuildNetwork",
       this.orgs[index].nodes.push(new Node())
     },
     genNet(){
-      console.log(this.orgs);
+      this.dialogVisible = false
+      //loading start
+      let oporg = this.orgs[0].name
+
       let instance = axios.create()
       instance({
         method:'post',
-        url:'http://localhost:8888/sendJson',
+        url:'http://47.115.158.68:8888/sendJson',
         data:{
-          name:this.network,
-          orgs:this.orgs
+          netName:this.network,
+          cas:this.cas,
+          peers:this.peers,
+          orderers:this.orderers,
+          opOrg:oporg
         }
       }).then(res=>{
         console.log(res);
       })
     },
     preview(){
+      this.treedata = []
+      this.cas = []
+      this.peers = []
+      this.orderers = []
       this.dialogVisible = true
       this.orgs.forEach(org=>{
         let children = []
         if(org.hasCa){
           children.push({'label':'CA服务器：ca1.'+org.name + '.com'})
+          this.cas.push('ca1.'+org.name + '.com')
         }
         let nodes = []
         org.nodes.forEach(node=>{
-          let label = node.type==='peer'?'peer节点：'+node.name + '.' + org.name + '.com':'orderer节点：'+node.name + '.' + org.name + '.ordererorg'
+          let label
+          if(node.type==='peer'){
+            label = 'peer节点：'+node.name + '.' + org.name + '.com'
+            this.peers.push(node.name + '.' + org.name + '.com')
+          }else{
+            label = 'orderer节点：'+node.name + '.' + org.name + '.ordererorg'
+            this.orderers.push(node.name + '.' + org.name + '.ordererorg')
+          }
           nodes.push({'label':label})
         })
         children.push({'label':'节点','children':nodes})
