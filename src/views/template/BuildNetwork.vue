@@ -51,7 +51,20 @@
         <el-tree :data="treedata" :default-expand-all="true"></el-tree></div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返回修改</el-button>
-        <el-button type="primary" @click="genNet">生成网络</el-button>
+        <el-button type="primary" @click="genNet">生成并启动网络</el-button>
+      </span>
+    </el-dialog>
+
+    <el-dialog
+        title="正在生成网络"
+        :visible.sync="loading"
+        width="30%"
+        :show-close="false"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false">
+      <div v-loading="loading" style="height:300px" element-loading-text="正在生成网络，预计时间5分钟，请稍等..."></div>
+      <span slot="footer" class="dialog-footer">
+<!--        <el-button>取消</el-button>-->
       </span>
     </el-dialog>
 
@@ -75,7 +88,8 @@ name: "BuildNetwork",
     treedata:[],
     cas:[],
     peers:[],
-    orderers:[]
+    orderers:[],
+    loading:false
   }
   },
   methods:{
@@ -93,8 +107,9 @@ name: "BuildNetwork",
     },
     genNet(){
       this.dialogVisible = false
+      this.loading = true
       //loading start
-      let oporg = this.orgs[0].name
+      let oporg = this.orgs[0].name + '.com'
 
       let instance = axios.create()
       instance({
@@ -109,6 +124,12 @@ name: "BuildNetwork",
         }
       }).then(res=>{
         console.log(res);
+        if(res.data == 'ok'){
+          this.$message.success("网络生成并启动成功！")
+        }else{
+          this.$message.error("失败！")
+        }
+        this.loading = false
       })
     },
     preview(){
