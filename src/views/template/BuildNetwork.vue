@@ -7,6 +7,9 @@
         <div class="btn" @click="preview">预览网络信息</div>
       </div>
       <div class="formitem">
+        <label>通道名：</label><el-input v-model="channel" placeholder="通道名"></el-input>
+      </div>
+      <div class="formitem">
         <div class="btn" @click="addorg">
           <i class="el-icon-plus" style="font-size: 20px;font-weight: bold;margin-right: 10px"></i>点击新建组织
         </div>
@@ -43,12 +46,16 @@
         title="确认网络信息"
         :visible.sync="dialogVisible"
         width="30%">
-      <h3 v-if="treedata.length!==0">根据你填写的内容，得到以下网络信息，请确认组织、节点、CA服务器等内容是否有误。</h3>
+      <h3>根据你填写的内容，得到以下网络信息，请确认组织、节点、CA服务器等内容是否有误。</h3>
       <div>
-        <div class="formitem" style="margin:1rem 0 .5rem;font-size: 1rem" v-if="treedata.length!==0">
+        <div class="formitem" style="margin:1rem 0 .5rem;font-size: 1rem" >
         <label>网络名：</label><span>{{network}}</span>
+        </div>
+        <div class="formitem" style="margin:1rem 0 .5rem;font-size: 1rem">
+          <label>通道名：</label><span>{{channel}}</span>
+        </div>
+        <el-tree :data="treedata" :default-expand-all="true"></el-tree>
       </div>
-        <el-tree :data="treedata" :default-expand-all="true"></el-tree></div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">返回修改</el-button>
         <el-button type="primary" @click="genNet">生成并启动网络</el-button>
@@ -89,7 +96,8 @@ name: "BuildNetwork",
     cas:[],
     peers:[],
     orderers:[],
-    loading:false
+    loading:false,
+    channel:''
   }
   },
   methods:{
@@ -117,6 +125,7 @@ name: "BuildNetwork",
         url:'http://47.115.158.68:8888/sendJson',
         data:{
           netName:this.network,
+          channel:this.channel,
           cas:this.cas,
           peers:this.peers,
           orderers:this.orderers,
@@ -125,9 +134,19 @@ name: "BuildNetwork",
       }).then(res=>{
         console.log(res);
         if(res.data == 'ok'){
-          this.$message.success("网络生成并启动成功！")
+          this.$message({
+            showClose: true,
+            message: '网络生成并启动成功！',
+            duration:0,
+            type: 'success'
+          })
         }else{
-          this.$message.error("失败！")
+          this.$message({
+            showClose: true,
+            message: '失败！',
+            duration:0,
+            type: 'error'
+          })
         }
         this.loading = false
       })
