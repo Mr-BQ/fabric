@@ -4,6 +4,7 @@ export class Org {
         this.type = ''
         this.nodes = []
         this.caPort = ''
+        this.hasCa = true
     }
 }
 

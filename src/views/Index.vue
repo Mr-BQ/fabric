@@ -1,7 +1,7 @@
 <template>
   <div class="index">
-    <el-container>
-      <el-header class="header">
+    <el-container style="height: 100vh;overflow: hidden">
+      <el-header class="header" style="height: 4rem">
         <el-row>
           <el-col :span="1">
             header
@@ -20,7 +20,7 @@
           </el-col>
         </el-row>
       </el-header>
-      <el-container>
+      <el-container style="height: 100%">
         <el-aside>
           <el-menu
               default-active="2"
@@ -32,7 +32,7 @@
               @close="handleClose"
               @select="menuClick"
               :router=true
-              style="height: 800px;">
+              style="height: 100%">
             <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-location"></i>
@@ -158,7 +158,9 @@ export default {
  }
  .el-main{
    color: black;
-   background-color: #ecf0f1;
+   padding-bottom: 10rem;
  }
+
+
 
 </style>
