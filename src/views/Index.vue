@@ -67,6 +67,10 @@
               <i class="el-icon-setting"></i>
               <span slot="title">建立网络</span>
             </el-menu-item>
+            <el-menu-item index="/networks">
+              <i class="el-icon-setting"></i>
+              <span slot="title">我的网络</span>
+            </el-menu-item>
           </el-menu>
         </el-aside>
         <el-main>

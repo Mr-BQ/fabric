@@ -3,10 +3,6 @@
 <!--    <div class="title">节点{{index+1}}</div>-->
     <div class="formitem">
       <label>节点名：</label>
-
-      .
-
-
       <el-input v-model="node.name" placeholder="节点名">
         <template slot="append">{{node.type=='orderer'?'.'+append+'.ordererorg':'.'+append+'.com'}}</template>
       </el-input>

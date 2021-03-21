@@ -39,7 +39,13 @@ const routes = [
         path:'/buildnetwork',
         name:'buildnetwork',
         component:()=>import('@/views/template/BuildNetwork')
+      },
+      {
+        path:'/networks',
+        name:'networks',
+        component:()=>import('@/views/template/mynetwork/NetWorks')
       }
+
     ],
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
