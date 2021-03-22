@@ -33,36 +33,36 @@
               @select="menuClick"
               :router=true
               style="height: 100%">
-            <el-submenu index="1">
-              <template slot="title">
-                <i class="el-icon-location"></i>
-                <span>导航一</span>
-              </template>
-              <el-menu-item-group>
-                <template slot="title">分组一</template>
-                <el-menu-item index="1-1">选项1</el-menu-item>
-                <el-menu-item index="1-2">选项2</el-menu-item>
-              </el-menu-item-group>
-              <el-menu-item-group title="分组2">
-                <el-menu-item index="1-3">选项3</el-menu-item>
-              </el-menu-item-group>
-              <el-submenu index="1-4">
-                <template slot="title">选项4</template>
-                <el-menu-item index="1-4-1">选项1</el-menu-item>
-              </el-submenu>
-            </el-submenu>
-            <el-menu-item index="/newtemplate">
-              <i class="el-icon-menu"></i>
-              <span slot="title">生成模板</span>
-            </el-menu-item>
-            <el-menu-item index="/upload" >
-              <i class="el-icon-document"></i>
-              <span slot="title">上传模板或实例</span>
-            </el-menu-item>
-            <el-menu-item index="/newinstance">
-              <i class="el-icon-setting"></i>
-              <span slot="title">生成实例</span>
-            </el-menu-item>
+<!--            <el-submenu index="1">-->
+<!--              <template slot="title">-->
+<!--                <i class="el-icon-location"></i>-->
+<!--                <span>导航一</span>-->
+<!--              </template>-->
+<!--              <el-menu-item-group>-->
+<!--                <template slot="title">分组一</template>-->
+<!--                <el-menu-item index="1-1">选项1</el-menu-item>-->
+<!--                <el-menu-item index="1-2">选项2</el-menu-item>-->
+<!--              </el-menu-item-group>-->
+<!--              <el-menu-item-group title="分组2">-->
+<!--                <el-menu-item index="1-3">选项3</el-menu-item>-->
+<!--              </el-menu-item-group>-->
+<!--              <el-submenu index="1-4">-->
+<!--                <template slot="title">选项4</template>-->
+<!--                <el-menu-item index="1-4-1">选项1</el-menu-item>-->
+<!--              </el-submenu>-->
+<!--            </el-submenu>-->
+<!--            <el-menu-item index="/newtemplate">-->
+<!--              <i class="el-icon-menu"></i>-->
+<!--              <span slot="title">生成模板</span>-->
+<!--            </el-menu-item>-->
+<!--            <el-menu-item index="/upload" >-->
+<!--              <i class="el-icon-document"></i>-->
+<!--              <span slot="title">上传模板或实例</span>-->
+<!--            </el-menu-item>-->
+<!--            <el-menu-item index="/newinstance">-->
+<!--              <i class="el-icon-setting"></i>-->
+<!--              <span slot="title">生成实例</span>-->
+<!--            </el-menu-item>-->
             <el-menu-item index="/buildnetwork">
               <i class="el-icon-setting"></i>
               <span slot="title">建立网络</span>

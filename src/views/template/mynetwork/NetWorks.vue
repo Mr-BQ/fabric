@@ -9,13 +9,13 @@
       </el-table-column>
       <el-table-column
           prop="id"
-          label="容器ID">
+          label="网络ID">
       </el-table-column>
       <el-table-column
           label="操作">
         <template slot-scope="scope">
           <el-button
-              @click.native.prevent="detail(scope.$index, tableData)"
+              @click.native.prevent="detail(scope.row)"
               type="text">
             查看
           </el-button>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import {request} from "@/Network/request";
+import {getNetinfo} from "@/Network";
 
 export default {
   name: "NetWorks",
@@ -35,15 +35,13 @@ export default {
       networks:[]
     }
   },
-  method:{
-    detail(){
-
+  methods:{
+    detail(row){
+      this.$router.replace("/networks/" + row.id)
     }
   },
   beforeMount() {
-    request({
-      url:'http://localhost:8888/test'
-    },'get').then(res=>{
+    getNetinfo().then(res=>{
       console.log(res);
       res.forEach(item=>{
         if(!item.Portainer){

@@ -44,6 +44,11 @@ const routes = [
         path:'/networks',
         name:'networks',
         component:()=>import('@/views/template/mynetwork/NetWorks')
+      },
+      {
+        path:'/networks/:id',
+        name:'containers',
+        component:()=>import('@/views/template/mynetwork/Containers')
       }
 
     ],
