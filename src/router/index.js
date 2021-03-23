@@ -18,7 +18,7 @@ const routes = [
     children:[
       {
         path:'/' ,
-        redirect:"/newtemplate"
+        redirect:"/networks"
       },
       {
         path:'/newtemplate',

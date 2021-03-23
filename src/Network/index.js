@@ -1,7 +1,7 @@
 import {request} from "@/Network/request";
 export function getNetinfo(id){
     return  request({
-        url:'http://47.115.158.68:8888/getNetinfo',
+        url:'/getNetinfo',
         params:{
             id
         }
@@ -10,7 +10,7 @@ export function getNetinfo(id){
 
 export function getContainers(id){
     return request({
-        url:"http://47.115.158.68:8888/getcontainers",
+        url:"/getcontainers",
         params:{
             id:id
         }
@@ -19,7 +19,7 @@ export function getContainers(id){
 
 export function openexplorer(netname){
     return request({
-        url:'http://47.115.158.68:8888/startexplorer',
+        url:'/startexplorer',
         params:{
             netname
         }

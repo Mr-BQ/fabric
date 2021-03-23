@@ -72,8 +72,8 @@ name: "containers",
         }
 
         this.loading = false
-        let el = document.getElementById('explorer')
-        el.click()
+        // let el = document.getElementById('explorer')
+        // el.click()
 
         // explorerlogin(this.network.Name).then(res=>{
         //   console.log(res);
