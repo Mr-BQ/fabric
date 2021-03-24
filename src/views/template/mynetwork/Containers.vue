@@ -1,36 +1,36 @@
 <template>
   <div class="containers">
-    <h1>网络:{{network.Name}}</h1>
-    <el-button type="primary" plain @click="explorer">打开区块浏览器</el-button>
-    <el-table
-        :data="containers"
-        style="width: 100%">
-      <el-table-column
-          prop="Names[0]"
-          label="容器" >
-        <template slot-scope="scope">
-          {{containers[scope.$index].Names[0].slice(1)}}
-        </template>
-      </el-table-column>
-      <el-table-column
-          prop="Id"
-          label="容器ID">
-      </el-table-column>
-      <el-table-column
-          prop="State"
-          label="状态">
-      </el-table-column>
-      <el-table-column
-          label="操作">
-        <template slot-scope="scope">
-          <el-button
-              @click.native.prevent="detail(scope.row)"
-              type="text">
-            查看
-          </el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-card>
+      <div class="netname">{{network && network.Name}}</div>
+      <div class="term">网络ID：<span>{{network && network.Id}}</span></div>
+      <div class="term">创建时间：<span>{{creatDate}}</span></div>
+    </el-card>
+
+    <div class="option">
+      <el-button type="primary" plain @click="explorer">启动区块浏览器</el-button>
+    </div>
+
+    <el-card>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>容器</th>
+            <th>容器ID</th>
+            <th>状态</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item,index) in containers" :key="index">
+            <td>{{item.Names[0].slice(1)}}</td>
+            <td>{{item.Id}}</td>
+            <td>{{item.State}}</td>
+            <td>操作</td>
+          </tr>
+        </tbody>
+      </table>
+    </el-card>
+
 
 
     <el-dialog
@@ -51,6 +51,7 @@
 
 <script>
 import {getNetinfo,getContainers,openexplorer} from "@/Network";
+import {formatDate} from "@/utils";
 
 export default {
 name: "containers",
@@ -75,6 +76,8 @@ name: "containers",
         let el = document.getElementById('explorer')
         el.click()
 
+
+
         // explorerlogin(this.network.Name).then(res=>{
         //   console.log(res);
         // })
@@ -90,10 +93,49 @@ name: "containers",
       console.log(res);
       this.containers = res
     })
+  },
+  watch:{
+    '$route'(to){
+      getNetinfo(to.params.id).then(res=>{
+        console.log(res);
+        this.network = res
+      })
+      getContainers(to.params.id).then(res=>{
+        console.log(res);
+        this.containers = res
+      })
+    }
+  },
+  computed:{
+    creatDate(){
+      return formatDate(new Date(this.network.Created),'yyyy-MM-dd hh:mm:ss')
+    }
   }
 }
 </script>
 
-<style scoped>
+<style scoped lang="less">
+.netname{
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: .5rem;
+}
+.term{
+  font-size: 1.2rem;
+  color: grey;
+  margin-bottom: .5rem;
+}
+.option{
+  margin-top: 1rem;
+}
 
+.table{
+  th{
+    width: 25%;
+  }
+  td{
+    text-align: center;
+    border:1px solid black;
+  }
+}
 </style>
