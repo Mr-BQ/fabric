@@ -1,31 +1,36 @@
 <template>
   <div class="containers">
-    <el-card>
+    <el-card style="margin-bottom: 1rem">
       <div class="netname">{{network && network.Name}}</div>
       <div class="term">网络ID：<span>{{network && network.Id}}</span></div>
-      <div class="term">创建时间：<span>{{creatDate}}</span></div>
+      <div class="term">创建时间：<span>{{dateString(new Date(this.network.Created),'yyyy-MM-dd hh:mm:ss')}}</span></div>
+      <div class="option">
+        <el-button type="primary" plain @click="explorer">启动区块浏览器</el-button>
+      </div>
     </el-card>
 
-    <div class="option">
-      <el-button type="primary" plain @click="explorer">启动区块浏览器</el-button>
-    </div>
 
-    <el-card>
-      <table class="table">
+
+    <el-card >
+      <table class="table" cellspacing="0" cellpadding="0">
         <thead>
           <tr>
-            <th>容器</th>
-            <th>容器ID</th>
-            <th>状态</th>
-            <th>操作</th>
+            <th style="width: 20%">容器</th>
+            <th style="width: 10%">状态</th>
+            <th style="width: 20%">创建时间</th>
+            <th style="width: 30%">镜像</th>
+            <th style="width: 10%">容器ID</th>
+            <th style="width: 20%">操作</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(item,index) in containers" :key="index">
-            <td>{{item.Names[0].slice(1)}}</td>
-            <td>{{item.Id}}</td>
-            <td>{{item.State}}</td>
-            <td>操作</td>
+            <td style="width: 20%"><a href="javascript:;" :title="item.Names[0].slice(1)">{{item.Names[0].slice(1)}}</a></td>
+            <td style="width: 10%;text-align: center;">{{item.State}}</td>
+            <td style="width: 20%;text-align: center;">{{dateString(new Date(item.Created*1000),'yyyy-MM-dd hh:mm:ss')}}</td>
+            <td style="width: 30%;text-align: center;"><a href="javascript:;" :title="item.Image">{{item.Image}}</a></td>
+            <td style="width: 10%"><a href="javascript:;" :title="item.Id">{{item.Id}}</a></td>
+            <td style="width: 20%;text-align: center;">操作</td>
           </tr>
         </tbody>
       </table>
@@ -63,6 +68,9 @@ name: "containers",
     }
   },
   methods:{
+    dateString(date,format){
+      return formatDate(date,format)
+    },
     explorer(){
       this.loading = true
       openexplorer(this.network.Name).then(res=>{
@@ -105,11 +113,6 @@ name: "containers",
         this.containers = res
       })
     }
-  },
-  computed:{
-    creatDate(){
-      return formatDate(new Date(this.network.Created),'yyyy-MM-dd hh:mm:ss')
-    }
   }
 }
 </script>
@@ -133,10 +136,46 @@ name: "containers",
 .table{
   th{
     width: 25%;
+    font-size: 1.2rem;
   }
   td{
-    text-align: center;
-    border:1px solid black;
+    a{
+      display: block;
+      text-align: left;
+      line-height: 2rem;
+      //word-break: break-word;
+      padding: 1rem;
+      overflow:hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      text-decoration: none;
+      color: inherit;
+    }
+
+
   }
+
+  tbody tr,thead{
+      display: table;
+      width:100%;
+      table-layout:fixed;
+  }
+
+  thead{
+      width: calc( 100% - 1rem );
+      background-color: #2ecc71;
+      height: 3rem;
+      color: #fff;
+  }
+  tbody{
+    display: block;
+    height: 500px;
+    overflow-y: auto;
+
+    tr:nth-child(even){
+      background-color: #ecf0f1;
+    }
+  }
+
 }
 </style>
