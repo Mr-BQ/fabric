@@ -33,24 +33,16 @@
               @select="menuClick"
               :router=true
               style="height: 100%">
-<!--            <el-submenu index="1">-->
-<!--              <template slot="title">-->
-<!--                <i class="el-icon-location"></i>-->
-<!--                <span>导航一</span>-->
-<!--              </template>-->
-<!--              <el-menu-item-group>-->
-<!--                <template slot="title">分组一</template>-->
-<!--                <el-menu-item index="1-1">选项1</el-menu-item>-->
-<!--                <el-menu-item index="1-2">选项2</el-menu-item>-->
-<!--              </el-menu-item-group>-->
-<!--              <el-menu-item-group title="分组2">-->
-<!--                <el-menu-item index="1-3">选项3</el-menu-item>-->
-<!--              </el-menu-item-group>-->
-<!--              <el-submenu index="1-4">-->
-<!--                <template slot="title">选项4</template>-->
-<!--                <el-menu-item index="1-4-1">选项1</el-menu-item>-->
-<!--              </el-submenu>-->
-<!--            </el-submenu>-->
+            <el-submenu index="1">
+              <template slot="title">
+                <i class="el-icon-location"></i>
+                <span>我的网络</span>
+              </template>
+              <el-menu-item v-for="(item,index) in networks" :key="index" :index="'/networks/'+item.name">
+                <i class="el-icon-menu"></i>
+                <span slot="title">{{item.name}}</span>
+              </el-menu-item>
+            </el-submenu>
 <!--            <el-menu-item index="/newtemplate">-->
 <!--              <i class="el-icon-menu"></i>-->
 <!--              <span slot="title">生成模板</span>-->
@@ -63,13 +55,13 @@
 <!--              <i class="el-icon-setting"></i>-->
 <!--              <span slot="title">生成实例</span>-->
 <!--            </el-menu-item>-->
+<!--            <el-menu-item index="/networks">-->
+<!--              <i class="el-icon-setting"></i>-->
+<!--              <span slot="title">我的网络</span>-->
+<!--            </el-menu-item>-->
             <el-menu-item index="/buildnetwork">
               <i class="el-icon-setting"></i>
               <span slot="title">建立网络</span>
-            </el-menu-item>
-            <el-menu-item index="/networks">
-              <i class="el-icon-setting"></i>
-              <span slot="title">我的网络</span>
             </el-menu-item>
           </el-menu>
         </el-aside>
@@ -92,6 +84,8 @@
 </template>
 
 <script>
+import {getNetinfo} from "@/Network";
+
 export default {
   name: "Index",
   data() {
@@ -100,7 +94,8 @@ export default {
       editableTabs: [],
       tabIndex: 0,
       circleUrl:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-      templates:[]
+      templates:[],
+      networks:[]
     }
   },
   methods: {
@@ -147,6 +142,16 @@ export default {
       //   this.$router.replace('/newinstance')
       // }
     }
+  },
+  beforeMount() {
+    getNetinfo().then(res=>{
+      console.log(res);
+      res.forEach(item=>{
+        if(!item.Portainer){
+          this.networks.push({name:item.Name,id:item.Id})
+        }
+      })
+    })
   }
 }
 </script>
