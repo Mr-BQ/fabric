@@ -8,8 +8,8 @@
         <el-button type="success" plain >启动网络</el-button>
         <el-button type="primary" plain @click="ccdialogshow=true">安装链码</el-button>
         <el-button type="info" plain >重启网络</el-button>
-        <el-button type="warning" plain >停止网络</el-button>
-        <el-button type="danger" plain >销毁网络</el-button>
+        <el-button type="warning" plain >拆除网络</el-button>
+        <el-button type="danger" plain >清除节点和运行文件</el-button>
       </div>
     </el-card>
 
@@ -117,8 +117,11 @@ name: "containers",
       console.log(file, fileList);
     },
     deploycc(){
-      let chaincode = JSON.stringify(this.fileList[0].raw)
-      deploychaincode(this.network.Name,chaincode,this.initFunc).then(res=>{
+      // let form = new FormData()
+      // form.append('netname',this.network.Name)
+      // form.append('chaincode',this.fileList[0].raw)
+      // form.append('initfunc',this.initFunc)
+      deploychaincode(this.network.Name,this.fileList[0].raw,this.initFunc).then(res=>{
         console.log(res);
       })
     },
