@@ -1,11 +1,15 @@
 <template>
   <div class="containers">
     <el-card style="margin-bottom: 1rem">
-      <div class="netname">{{network && network.Name}}</div>
+      <div class="netname">{{network && network.Name.split('_')[0]}}</div>
       <div class="term">网络ID：<span>{{network && network.Id}}</span></div>
-      <div class="term">创建时间：<span>{{dateString(new Date(this.network.Created),'yyyy-MM-dd hh:mm:ss')}}</span></div>
+      <div class="term">创建时间：<span>{{network && dateString(new Date(this.network.Created),'yyyy-MM-dd hh:mm:ss')}}</span></div>
       <div class="option">
-        <el-button type="primary" plain @click="explorer">启动区块浏览器</el-button>
+        <el-button type="success" plain >启动网络</el-button>
+        <el-button type="primary" plain @click="ccdialogshow=true">安装链码</el-button>
+        <el-button type="info" plain >重启网络</el-button>
+        <el-button type="warning" plain >停止网络</el-button>
+        <el-button type="danger" plain >销毁网络</el-button>
       </div>
     </el-card>
 
@@ -50,12 +54,44 @@
 <!--        <el-button>取消</el-button>-->
       </span>
     </el-dialog>
-    <a href="http://47.115.158.68:7201" target="_blank" v-show="false" id="explorer"></a>
+
+    <el-dialog
+        title="安装链码"
+        :visible.sync="ccdialogshow"
+        width="50%"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false">
+      <div>
+        <div class="formitem">
+          <label>链码部署网络：</label><span>{{network && network.Name.split('_')[0]}}</span>
+        </div>
+        <div class="formitem">
+          <label>请上传链码：</label>
+          <el-upload
+              action=""
+              :on-remove="handleRemove"
+              :on-change="handleChange"
+              :file-list="fileList"
+              :auto-upload="false">
+            <el-button slot="trigger" size="small" type="success">选取文件</el-button>
+<!--            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>-->
+            <div slot="tip" class="el-upload__tip">只能上传后缀名为tar.gz的压缩文件，文件名为链码名称，例如sample.tar.gz</div>
+          </el-upload>
+        </div>
+        <div class="formitem" style="margin:1rem 0 .5rem;font-size: 1rem">
+          <label>链码初始化方法名：</label><el-input v-model="initFunc" placeholder="请输入内容"></el-input>
+        </div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="deploycc">部署链码</el-button>
+      </span>
+    </el-dialog>
+<!--    <a href="http://47.115.158.68:7201" target="_blank" v-show="false" id="explorer"></a>-->
   </div>
 </template>
 
 <script>
-import {getNetinfo,getContainers,openexplorer} from "@/Network";
+import {getNetinfo,getContainers,openexplorer,deploychaincode} from "@/Network";
 import {formatDate} from "@/utils";
 
 export default {
@@ -64,10 +100,28 @@ name: "containers",
     return{
       containers:[],
       network:null,
-      loading:false
+      loading:false,
+      ccdialogshow:false,
+      fileList:[],
+      initFunc:'init'
     }
   },
   methods:{
+    handleChange(file){
+      if(this.fileList.length !== 0){
+        this.fileList.pop()
+      }
+      this.fileList.push(file)
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    deploycc(){
+      let chaincode = JSON.stringify(this.fileList[0].raw)
+      deploychaincode(this.network.Name,chaincode,this.initFunc).then(res=>{
+        console.log(res);
+      })
+    },
     dateString(date,format){
       return formatDate(date,format)
     },
@@ -178,4 +232,23 @@ name: "containers",
   }
 
 }
+
+.formitem{
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  label{
+    width: 20%;
+    text-align: center;
+    font-size: 1.2rem;
+  }
+  .el-input{
+    width: 50%;
+    font-size: 1rem;
+  }
+  span{
+    font-size: 1.2rem;
+  }
+}
+
 </style>

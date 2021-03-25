@@ -3,7 +3,7 @@ export function getNetinfo(id){
     return  request({
         url:'/getNetinfo',
         params:{
-            id
+            id:id?id+'_mininet':null
         }
     },'get')
 }
@@ -12,7 +12,7 @@ export function getContainers(id){
     return request({
         url:"/getcontainers",
         params:{
-            id:id
+            id:id+'_mininet'
         }
     },'get')
 }
@@ -21,7 +21,7 @@ export function openexplorer(netname){
     return request({
         url:'/startexplorer',
         params:{
-            netname
+            netname:netname + '_mininet'
         }
     },'get')
 }
@@ -34,6 +34,17 @@ export function explorerlogin(netname){
             user:"exploreradmin",
             password:"exploreradminpw"
 
+        }
+    },'post')
+}
+
+export function deploychaincode(netname,chaincode,initfunc){
+    return request({
+        url:'http://localhost:8888/deploychaincode',
+        params:{
+            netname,
+            chaincode,
+            initfunc
         }
     },'post')
 }

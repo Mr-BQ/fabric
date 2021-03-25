@@ -1,10 +1,11 @@
 <template>
   <div class="build-network">
-    <h1>build network</h1>
+    <div style="font-size: 2rem;">建立网络</div>
     <div class="form">
       <div class="formitem">
         <label>网络名：</label><el-input v-model="network" placeholder="网络名"></el-input>
         <div class="btn" @click="preview">预览网络信息</div>
+<!--        <el-button type="primary" @click="preview">预览网络信息</el-button>-->
       </div>
       <div class="formitem">
         <label>通道名：</label><el-input v-model="channel" placeholder="通道名"></el-input>
@@ -124,7 +125,7 @@ name: "BuildNetwork",
         method:'post',
         url:'http://47.115.158.68:8888/sendJson',
         data:{
-          netName:this.network,
+          netName:this.network + '_mininet',
           channel:this.channel,
           cas:this.cas,
           peers:this.peers,
@@ -190,8 +191,9 @@ name: "BuildNetwork",
 <style scoped lang="less">
   .form{
     //border:1px solid grey;
-    width: 50%;
+    //width: 50%;
     //margin: 0 auto;
+    margin-top: 2rem;
   }
   .formitem{
     display: flex;

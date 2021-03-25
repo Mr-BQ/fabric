@@ -33,14 +33,21 @@
               @select="menuClick"
               :router=true
               style="height: 100%">
+            <el-menu-item index="/dashboard">
+              <i class="el-icon-setting"></i>
+              <span slot="title">dashboard</span>
+            </el-menu-item>
             <el-submenu index="1">
               <template slot="title">
                 <i class="el-icon-location"></i>
                 <span>我的网络</span>
               </template>
-              <el-menu-item v-for="(item,index) in networks" :key="index" :index="'/networks/'+item.name">
+              <el-menu-item v-for="(item,index) in networks" :key="index" :index="'/networks/'+item.name.split('_')[0]">
                 <i class="el-icon-menu"></i>
-                <span slot="title">{{item.name}}</span>
+                <span slot="title">{{item.name.split('_')[0]}}</span>
+              </el-menu-item>
+              <el-menu-item v-if="networks.length==0">
+                <span slot="title">暂无网络</span>
               </el-menu-item>
             </el-submenu>
 <!--            <el-menu-item index="/newtemplate">-->
@@ -66,15 +73,15 @@
           </el-menu>
         </el-aside>
         <el-main>
-          <el-tabs v-model="editableTabsValue" type="card" closable @edit="handleTabsEdit">
-            <el-tab-pane
-                :key="item.name"
-                v-for="item in editableTabs"
-                :label="item.title"
-                :name="item.name"
-            >
-            </el-tab-pane>
-          </el-tabs>
+<!--          <el-tabs v-model="editableTabsValue" type="card" closable @edit="handleTabsEdit">-->
+<!--            <el-tab-pane-->
+<!--                :key="item.name"-->
+<!--                v-for="item in editableTabs"-->
+<!--                :label="item.title"-->
+<!--                :name="item.name"-->
+<!--            >-->
+<!--            </el-tab-pane>-->
+<!--          </el-tabs>-->
           <router-view></router-view>
         </el-main>
       </el-container>
@@ -146,11 +153,15 @@ export default {
   beforeMount() {
     getNetinfo().then(res=>{
       console.log(res);
-      res.forEach(item=>{
-        if(!item.Portainer){
-          this.networks.push({name:item.Name,id:item.Id})
-        }
-      })
+      if(res =='no net'){
+        this.networks = []
+      }else{
+        res.forEach(item=>{
+          if(!item.Portainer){
+            this.networks.push({name:item.Name,id:item.Id})
+          }
+        })
+      }
     })
   }
 }
