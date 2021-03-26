@@ -30,7 +30,11 @@
         <tbody>
           <tr v-for="(item,index) in containers" :key="index">
             <td style="width: 20%"><a href="javascript:;" :title="item.Names[0].slice(1)">{{item.Names[0].slice(1)}}</a></td>
-            <td style="width: 10%;text-align: center;">{{item.State}}</td>
+            <td style="width: 10%;text-align: center;">
+              <el-tag type="success" effect="dark" v-if="item.State=='running' && item.Status.indexOf('healthy') != -1">healthy</el-tag>
+              <el-tag type="success" effect="dark" v-else-if="item.State=='running'">running</el-tag>
+              <el-tag type="danger" effect="dark" v-else>stopped</el-tag>
+            </td>
             <td style="width: 20%;text-align: center;">{{dateString(new Date(item.Created*1000),'yyyy-MM-dd hh:mm:ss')}}</td>
             <td style="width: 30%;text-align: center;"><a href="javascript:;" :title="item.Image">{{item.Image}}</a></td>
             <td style="width: 10%"><a href="javascript:;" :title="item.Id">{{item.Id}}</a></td>
@@ -43,13 +47,13 @@
 
 
     <el-dialog
-        title=""
+        :title="dialogtitle"
         :visible.sync="loading"
         width="30%"
         :show-close="false"
         :close-on-click-modal="false"
         :close-on-press-escape="false">
-      <div v-loading="loading" style="height:300px" element-loading-text="正在打开区块浏览器..."></div>
+      <div v-loading="loading" style="height:300px" :element-loading-text="dialogcontent"></div>
       <span slot="footer" class="dialog-footer">
 <!--        <el-button>取消</el-button>-->
       </span>
@@ -103,7 +107,9 @@ name: "containers",
       loading:false,
       ccdialogshow:false,
       fileList:[],
-      initFunc:'init'
+      initFunc:'init',
+      dialogtitle:'',
+      dialogcontent:'正在打开区块浏览器...'
     }
   },
   methods:{
@@ -117,18 +123,29 @@ name: "containers",
       console.log(file, fileList);
     },
     deploycc(){
+      this.dialogtitle = ''
+      this.dialogcontent = '正在部署链码，请稍等...'
+      this.loading = true
       let form = new FormData()
       form.append('chaincode',this.fileList[0].raw)
       form.append('netname',this.network.Name)
       form.append('initfunc',this.initFunc)
       deploychaincode(form).then(res=>{
         console.log(res);
+        this.loading = false
+        if(res != 'ok'){
+          this.$message.error('失败！请重试！')
+          return
+        }
+        this.$message.success('成功！请在区块信息模块查看链码信息')
       })
     },
     dateString(date,format){
       return formatDate(date,format)
     },
     explorer(){
+      this.dialogtitle = ''
+      this.dialogcontent = '正在打开区块浏览器...'
       this.loading = true
       openexplorer(this.network.Name).then(res=>{
         this.loading = true

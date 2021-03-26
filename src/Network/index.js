@@ -40,7 +40,7 @@ export function explorerlogin(netname){
 
 export function deploychaincode(form){
     return request({
-        url:'http://localhost:8888/deploychaincode',
+        url:'http://47.115.158.68:8888/deploychaincode',
         data:form,
         method:'post'
     })
