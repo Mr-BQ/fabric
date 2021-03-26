@@ -117,11 +117,11 @@ name: "containers",
       console.log(file, fileList);
     },
     deploycc(){
-      // let form = new FormData()
-      // form.append('netname',this.network.Name)
-      // form.append('chaincode',this.fileList[0].raw)
-      // form.append('initfunc',this.initFunc)
-      deploychaincode(this.network.Name,this.fileList[0].raw,this.initFunc).then(res=>{
+      let form = new FormData()
+      form.append('chaincode',this.fileList[0].raw)
+      form.append('netname',this.network.Name)
+      form.append('initfunc',this.initFunc)
+      deploychaincode(form).then(res=>{
         console.log(res);
       })
     },

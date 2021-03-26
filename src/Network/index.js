@@ -38,13 +38,10 @@ export function explorerlogin(netname){
     },'post')
 }
 
-export function deploychaincode(netname,chaincode,initfunc){
+export function deploychaincode(form){
     return request({
         url:'http://localhost:8888/deploychaincode',
-        params:{
-            netname,
-            chaincode,
-            initfunc
-        }
-    },'post')
+        data:form,
+        method:'post'
+    })
 }
