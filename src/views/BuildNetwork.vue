@@ -1,7 +1,7 @@
 <template>
   <div class="build-network">
-    <div style="font-size: 2rem;">建立网络</div>
-    <div class="form">
+    <el-card>
+    <div style="font-size: 2rem;margin-bottom: 1rem">建立网络</div>
       <div class="formitem">
         <label>网络名：</label><el-input v-model="network" placeholder="网络名"></el-input>
         <div class="btn" @click="preview">预览网络信息</div>
@@ -10,20 +10,25 @@
       <div class="formitem">
         <label>通道名：</label><el-input v-model="channel" placeholder="通道名"></el-input>
       </div>
-      <div class="formitem">
-        <div class="btn" @click="addorg">
-          <i class="el-icon-plus" style="font-size: 20px;font-weight: bold;margin-right: 10px"></i>点击新建组织
-        </div>
-      </div>
-      <div class="orgform">
-        <el-collapse>
-          <el-collapse-item v-for="(item,index) in orgs" :key="index" style="height: 100%">
+<!--      <div class="formitem">-->
+<!--        <div class="btn" @click="addorg">-->
+<!--          <i class="el-icon-plus" style="font-size: 20px;font-weight: bold;margin-right: 10px"></i>点击新建组织-->
+<!--        </div>-->
+<!--      </div>-->
+    </el-card>
+
+    <el-card style="margin-top: 2rem">
+      <div  class="orgform">
+        <el-collapse style="margin-bottom: 1rem" v-if="orgs.length!==0">
+          <el-collapse-item v-for="(item,index) in orgs" :key="index" style="height: 100%;">
+
             <div slot="title">
-              <i class="el-icon-remove" style="color: #e74c3c;font-size: 1rem;margin-right: 1rem" @click.stop="removeOrg(index)"></i>
-              <span>{{'组织'+ (index+1)}}</span>
+              <i class="el-icon-error" style="color: #e74c3c;font-size: 1rem;margin-right: 1rem;font-size: 1.5rem" @click.stop="removeOrg(index)"></i>
+              <span style="font-size: 1.5rem">{{'组织'+ (index+1)}}</span>
             </div>
 
             <org-form :org="item" :index="index" @addnode="addnode">
+
               <div slot="nodeform">
                 <el-collapse>
                   <el-collapse-item v-for="(node,idx) in orgs[index].nodes" :key="idx" >
@@ -35,13 +40,16 @@
                   </el-collapse-item>
                 </el-collapse>
               </div>
-
-
             </org-form>
+
           </el-collapse-item>
         </el-collapse>
+        <div  @click="addorg" style="cursor: pointer;display: inline-block">
+          <i class="el-icon-circle-plus" style="color: #2ecc71;font-size: 1rem;margin-right: 1rem;font-size: 1.5rem"></i>
+          <span style="font-size: 1.5rem">新建组织</span>
+        </div>
       </div>
-    </div>
+    </el-card>
 
     <el-dialog
         title="确认网络信息"
@@ -226,4 +234,14 @@ name: "BuildNetwork",
     }
   }
 
+</style>
+
+<style>
+.el-collapse{
+  border: none;
+}
+
+  .el-collapse-item div{
+  border: none;
+}
 </style>

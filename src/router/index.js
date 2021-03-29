@@ -18,42 +18,84 @@ const routes = [
     children:[
       {
         path:'/' ,
-        redirect:"/dashboard"
+        redirect:'/home'
       },
       {
-        path:'/dashboard',
-        name:'dashboard',
-        component:() => import('@/views/DashBoard')
+        path:'/home',
+        name:'home',
+        component:() => import('@/views/Home')
       },
       {
         path:'/newtemplate',
         name:'NewTemplate',
-        component:() => import('@/views/template/NewTemplate')
+        component:() => import('@/views/NewTemplate')
       },
       {
         path:'/upload',
         name:'upload',
-        component:() => import('@/views/template/Upload')
+        component:() => import('@/views/Upload')
       },
       {
         path:'/newinstance',
         name:'newinstance',
-        component:()=>import('@/views/template/NewInstance')
+        component:()=>import('@/views/NewInstance')
       },
       {
         path:'/buildnetwork',
         name:'buildnetwork',
-        component:()=>import('@/views/template/BuildNetwork')
+        component:()=>import('@/views/BuildNetwork')
       },
       {
         path:'/networks',
         name:'networks',
-        component:()=>import('@/views/template/mynetwork/NetWorks')
+        component:()=>import('@/views/mynetwork/NetWorks')
       },
       {
         path:'/networks/:id',
         name:'containers',
-        component:()=>import('@/views/template/mynetwork/Containers')
+        component:()=>import('@/views/mynetwork/Containers')
+      },
+      {
+        path:'/explorer',
+        name:'exolorer',
+        component:()=>import('@/views/explorer/Explorer'),
+        children:[
+          {
+            path:'/',
+            redirect:'dashboard'
+          },
+          {
+            path:'dashboard',
+            name:'explorer_dashboard',
+            component:()=>import('@/views/explorer/childrenComponents/Dashborad')
+          },
+          {
+            path:'network',
+            name:'explorer_network',
+            component:()=>import('@/views/explorer/childrenComponents/Network')
+          },
+          {
+            path:'block',
+            name:'explorer_block',
+            component:()=>import('@/views/explorer/childrenComponents/Block')
+          },
+          {
+            path:'transaction',
+            name:'explorer_transaction',
+            component:()=>import('@/views/explorer/childrenComponents/Transaction')
+          },
+          {
+            path:'chaincode',
+            name:'explorer_chaincode',
+            component:()=>import('@/views/explorer/childrenComponents/Chaincode')
+          },
+          {
+            path:'channel',
+            name:'explorer_channel',
+            component:()=>import('@/views/explorer/childrenComponents/Channel')
+          }
+
+        ]
       }
 
     ],
@@ -61,7 +103,12 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import('@/views/Index')
-  }
+  },
+  {
+    path: '/refresh',
+    name:'refresh',
+    component:()=>import('@/components/common/Refresh'),
+  },
 
 ]
 

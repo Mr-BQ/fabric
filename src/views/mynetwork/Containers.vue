@@ -134,10 +134,20 @@ name: "containers",
         console.log(res);
         this.loading = false
         if(res != 'ok'){
-          this.$message.error('失败！请重试！')
+          this.$message({
+            showClose: true,
+            message: '失败！请重试！',
+            duration:0,
+            type: 'error'
+          })
           return
         }
-        this.$message.success('成功！请在区块信息模块查看链码信息')
+        this.$message({
+          showClose: true,
+          message: '成功！请在区块信息模块查看链码信息',
+          duration:0,
+          type: 'success'
+        })
       })
     },
     dateString(date,format){

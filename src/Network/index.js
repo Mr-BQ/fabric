@@ -45,3 +45,18 @@ export function deploychaincode(form){
         method:'post'
     })
 }
+
+export function currentexolorer(){
+    return request({
+        url:'http://47.115.158.68:8888/explorer'
+    },'get')
+}
+
+export function stopexplorer(netname){
+    return request({
+        url:'http://47.115.158.68:8888/stopexplorer',
+        params:{
+            netname:netname
+        }
+    },'post')
+}
