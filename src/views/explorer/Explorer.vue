@@ -9,12 +9,12 @@
     </el-card>
 
     <div v-else-if="explorer && !loading">
-      <el-card >
-        <span>区块浏览器：<span style="font-weight: bold">{{explorer.split('_')[0]}}</span></span>
-        <el-button type="warning" plain style="margin-left: 1rem" @click="stopExplorer">停止</el-button>
-      </el-card>
+<!--      <el-card >-->
+<!--        <span>区块浏览器：<span style="font-weight: bold">{{explorer.split('_')[0]}}</span></span>-->
+<!--        <el-button type="warning" plain style="margin-left: 1rem" @click="stopExplorer">停止</el-button>-->
+<!--      </el-card>-->
 
-      <el-card style="margin-top: 2rem">
+      <el-card >
         <router-view></router-view>
       </el-card>
     </div>
@@ -41,7 +41,7 @@
 </template>
 
 <script>
-import {currentexolorer, getNetinfo, openexplorer, stopexplorer} from "@/Network";
+import {currentexolorer, getNetinfo, openexplorer} from "@/Network";
 
 export default {
   name: "Explorer",
@@ -59,32 +59,6 @@ export default {
     }
   },
   methods:{
-    stopExplorer(){
-      this.dialog = {
-        title:'正在关闭区块浏览器',
-        text:'正在关闭'+this.explorer.split('_')[0]+'区块浏览器，请稍等......'
-      }
-      this.loadingexlorer = true
-      stopexplorer(this.explorer).then(res=>{
-        if(res != 'ok'){
-          this.$message({
-            showClose: true,
-            message: '失败！',
-            duration:0,
-            type: 'error'
-          })
-        }else{
-          this.$message({
-            showClose: true,
-            message: '已关闭！',
-            duration:0,
-            type: 'success'
-          })
-        }
-        this.loadingexlorer = false
-        this.$router.replace('/refresh')
-      })
-    },
     openExplorer(){
       this.dialog = {
         title:'正在启动区块浏览器',
@@ -110,6 +84,7 @@ export default {
         }
         this.loadingexlorer = false
         this.$router.replace('/refresh')
+        // this.$router.replace('/refresh')
         // let el = document.getElementById('explorer')
         // el.click()
 
@@ -136,6 +111,18 @@ export default {
       currentexolorer().then(res=>{
         this.explorer = res
         console.log(res);
+        if(this.explorer !== null){
+          let id = ''
+          for(let i;i < this.networks.length;i++){
+            if(this.networks[i].name == this.explorer){
+              id = this.networks[i].id
+            }
+          }
+          this.$store.commit('setNetname',this.explorer)
+          this.$store.commit('setNetid',id)
+
+        }
+
       })
       this.loading = false
     })

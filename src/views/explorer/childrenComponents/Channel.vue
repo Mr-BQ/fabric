@@ -1,6 +1,6 @@
 <template>
   <div class="channel">
-    <Header :active="6"></Header>
+    <Header :active="6" :netname="$store.state.netname"></Header>
   </div>
 </template>
 

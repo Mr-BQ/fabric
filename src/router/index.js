@@ -57,13 +57,9 @@ const routes = [
       },
       {
         path:'/explorer',
-        name:'exolorer',
+        name:'explorer',
         component:()=>import('@/views/explorer/Explorer'),
         children:[
-          {
-            path:'/',
-            redirect:'dashboard'
-          },
           {
             path:'dashboard',
             name:'explorer_dashboard',

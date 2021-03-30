@@ -1,6 +1,6 @@
 <template>
   <div class="transaction">
-    <Header :active="4"></Header>
+    <Header :active="4" :netname="$store.state.netname"></Header>
   </div>
 </template>
 

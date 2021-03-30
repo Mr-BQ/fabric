@@ -6,7 +6,9 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     templates:[],
-    instances:[]
+    instances:[],
+    netname:'',
+    netid:''
   },
   mutations: {
     addTemplate(state,payload){
@@ -14,6 +16,12 @@ export default new Vuex.Store({
     },
     addInstance(state,payload){
       state.instances.push(payload)
+    },
+    setNetname(state,payload){
+      state.netname = payload
+    },
+    setNetid(state,payload){
+      state.netid = payload
     }
   },
   actions: {

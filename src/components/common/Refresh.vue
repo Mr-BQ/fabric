@@ -12,7 +12,15 @@ export default {
       // }else{
       //
       // }
-      vm.$router.replace(from.path)
+      if(from.path.indexOf('dashboard') !== -1){
+        vm.$router.replace('/explorer')
+      }else if(from.name == 'explorer'){
+        vm.$router.replace('/explorer/dashboard')
+      }else{
+        vm.$router.replace(from.path)
+      }
+
+
     })
   }
 }

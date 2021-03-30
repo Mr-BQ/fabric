@@ -19,28 +19,28 @@ export function getContainers(id){
 
 export function openexplorer(netname){
     return request({
-        url:'/startexplorer',
-        params:{
-            netname:netname + '_mininet'
-        }
+        url:'/explorer/start/' + netname + '_mininet'
     },'get')
 }
 
-export function explorerlogin(netname){
-    return request({
-        url:'http://47.115.158.68:7201/auth/login',
-        data:{
-            network:netname,
-            user:"exploreradmin",
-            password:"exploreradminpw"
-
-        }
-    },'post')
-}
+// export function explorerlogin(netname){
+//     return request({
+//         url:'http://47.115.158.68:7201/auth/login',
+//         headers:{
+//             'referrer Policy': 'no-referrer'
+//         },
+//         data:{
+//             network:netname,
+//             user:"exploreradmin",
+//             password:"exploreradminpw"
+//         },
+//         method:'post'
+//     })
+// }
 
 export function deploychaincode(form){
     return request({
-        url:'http://47.115.158.68:8888/deploychaincode',
+        url:'/deploychaincode',
         data:form,
         method:'post'
     })
@@ -48,15 +48,18 @@ export function deploychaincode(form){
 
 export function currentexolorer(){
     return request({
-        url:'http://47.115.158.68:8888/explorer'
+        url:'/explorer'
     },'get')
 }
 
 export function stopexplorer(netname){
     return request({
-        url:'http://47.115.158.68:8888/stopexplorer',
-        params:{
-            netname:netname
-        }
-    },'post')
+        url:'/explorer/stop/' + netname,
+    },'get')
+}
+
+export function ExplorerStatus(){
+    return request({
+        url:'/explorer/status'
+    },'get')
 }

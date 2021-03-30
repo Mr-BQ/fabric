@@ -86,7 +86,10 @@
 <!--            >-->
 <!--            </el-tab-pane>-->
 <!--          </el-tabs>-->
-          <router-view></router-view>
+          <keep-alive>
+            <router-view></router-view>
+          </keep-alive>
+
         </el-main>
       </el-container>
     </el-container>
