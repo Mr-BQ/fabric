@@ -83,23 +83,7 @@ export default {
       if(index == this.active){
         return
       }
-      switch (index){
-        case 1 :
-          this.$router.replace('/explorer/dashboard');break
-        case 2 :
-          this.$router.replace('/explorer/network');break
-        case 3 :
-          this.$router.replace('/explorer/block');break
-        case 4 :
-          this.$router.replace('/explorer/transaction');break
-        case 5 :
-          this.$router.replace('/explorer/chaincode');break
-        case 6 :
-          this.$router.replace('/explorer/channel');break
-        default :
-          this.$router.replace('/explorer/dashboard');break
-
-      }
+      this.$emit('itemclick',index)
     }
   }
 }

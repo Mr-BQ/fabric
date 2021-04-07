@@ -13,9 +13,16 @@
 <!--        <span>区块浏览器：<span style="font-weight: bold">{{explorer.split('_')[0]}}</span></span>-->
 <!--        <el-button type="warning" plain style="margin-left: 1rem" @click="stopExplorer">停止</el-button>-->
 <!--      </el-card>-->
-
-      <el-card >
-        <router-view></router-view>
+      <el-card style="margin-bottom: 1rem">
+        <Header :active.sync="active" :netname="$store.state.netname" @itemclick="itemclick"></Header>
+      </el-card>
+      <el-card>
+        <Dashboard v-if="active == 1"/>
+        <Network v-else-if="active == 2" />
+        <Block v-else-if="active == 3" />
+        <Transaction v-else-if="active == 4" />
+        <Chaincode v-else-if="active == 5" />
+        <Channel v-else-if="active == 6" />
       </el-card>
     </div>
 
@@ -42,7 +49,13 @@
 
 <script>
 import {currentexolorer, getNetinfo, openexplorer} from "@/Network";
-
+import Header from "@/components/explorer/Header";
+import Dashboard from "@/views/explorer/childrenComponents/Dashborad";
+import Network from "@/views/explorer/childrenComponents/Network";
+import Block from "@/views/explorer/childrenComponents/Block";
+import Transaction from "@/views/explorer/childrenComponents/Transaction";
+import Chaincode from "@/views/explorer/childrenComponents/Chaincode";
+import Channel from "@/views/explorer/childrenComponents/Channel";
 export default {
   name: "Explorer",
   data(){
@@ -55,10 +68,14 @@ export default {
       dialog:{
         title:'正在启动区块浏览器',
         text:'正在为'+this.network+'启动区块浏览器，请稍等......'
-      }
+      },
+      active:1
     }
   },
   methods:{
+    itemclick(index){
+      this.active = index
+    },
     openExplorer(){
       this.dialog = {
         title:'正在启动区块浏览器',
@@ -66,24 +83,28 @@ export default {
       }
       this.loadingexlorer = true
       openexplorer(this.network).then(res=>{
-        if(res != 'ok'){
-          this.$message({
-            showClose: true,
-            message: '失败！',
-            duration:0,
-            type: 'error'
-          })
-        }else{
-          this.$message({
-            showClose: true,
-            message: '区块浏览器启动成功！',
-            duration:0,
-            type: 'success'
-          })
+        setTimeout(()=>{
+          if(res != 'ok'){
+            this.$message({
+              showClose: true,
+              message: '失败！',
+              duration:0,
+              type: 'error'
+            })
+          }else{
+            this.$message({
+              showClose: true,
+              message: '区块浏览器启动成功！',
+              duration:0,
+              type: 'success'
+            })
 
-        }
-        this.loadingexlorer = false
-        this.$router.replace('/refresh')
+          }
+          this.loadingexlorer = false
+          this.$router.replace('/refresh')
+        },5000)
+
+
         // this.$router.replace('/refresh')
         // let el = document.getElementById('explorer')
         // el.click()
@@ -126,13 +147,19 @@ export default {
       })
       this.loading = false
     })
-
-
+  },
+  components:{
+    Header,
+    Dashboard,
+    Network,
+    Block,
+    Transaction,
+    Chaincode,
+    Channel
   }
 }
 </script>
 
 <style scoped>
-
 
 </style>

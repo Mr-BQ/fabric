@@ -58,40 +58,7 @@ const routes = [
       {
         path:'/explorer',
         name:'explorer',
-        component:()=>import('@/views/explorer/Explorer'),
-        children:[
-          {
-            path:'dashboard',
-            name:'explorer_dashboard',
-            component:()=>import('@/views/explorer/childrenComponents/Dashborad')
-          },
-          {
-            path:'network',
-            name:'explorer_network',
-            component:()=>import('@/views/explorer/childrenComponents/Network')
-          },
-          {
-            path:'block',
-            name:'explorer_block',
-            component:()=>import('@/views/explorer/childrenComponents/Block')
-          },
-          {
-            path:'transaction',
-            name:'explorer_transaction',
-            component:()=>import('@/views/explorer/childrenComponents/Transaction')
-          },
-          {
-            path:'chaincode',
-            name:'explorer_chaincode',
-            component:()=>import('@/views/explorer/childrenComponents/Chaincode')
-          },
-          {
-            path:'channel',
-            name:'explorer_channel',
-            component:()=>import('@/views/explorer/childrenComponents/Channel')
-          }
-
-        ]
+        component:()=>import('@/views/explorer/Explorer')
       }
 
     ],

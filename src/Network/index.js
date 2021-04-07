@@ -63,3 +63,18 @@ export function ExplorerStatus(){
         url:'/explorer/status'
     },'get')
 }
+
+export function getdata(url){
+    return request({
+        url:'/explorer/getdata',
+        params:{
+            url:url
+        }
+    },'get')
+}
+
+export function curchannel(){
+    return request({
+        url:'/explorer/curchannel'
+    },'get')
+}
