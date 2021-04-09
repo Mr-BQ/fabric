@@ -85,6 +85,9 @@
         <div class="formitem" style="margin:1rem 0 .5rem;font-size: 1rem">
           <label>链码初始化方法名：</label><el-input v-model="initFunc" placeholder="请输入内容"></el-input>
         </div>
+        <div class="formitem" style="margin:1rem 0 .5rem;font-size: 1rem">
+          <label>版本：</label><el-input v-model="version" placeholder="请输入内容"></el-input>
+        </div>
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button type="primary" @click="deploycc">部署链码</el-button>
@@ -109,7 +112,8 @@ name: "containers",
       fileList:[],
       initFunc:'init',
       dialogtitle:'',
-      dialogcontent:'正在打开区块浏览器...'
+      dialogcontent:'正在打开区块浏览器...',
+      version:''
     }
   },
   methods:{
@@ -130,6 +134,7 @@ name: "containers",
       form.append('chaincode',this.fileList[0].raw)
       form.append('netname',this.network.Name)
       form.append('initfunc',this.initFunc)
+      form.append('version',this.version)
       deploychaincode(form).then(res=>{
         console.log(res);
         this.loading = false
@@ -142,6 +147,10 @@ name: "containers",
           })
           return
         }
+        this.fileList = []
+        this.initFunc = ''
+        this.version = ''
+        this.ccdialogshow = false
         this.$message({
           showClose: true,
           message: '成功！请在区块信息模块查看链码信息',
