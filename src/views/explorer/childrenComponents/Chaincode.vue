@@ -45,7 +45,8 @@
         <label>方法名：</label><el-input v-model="func" placeholder="请输入内容"></el-input>
       </div>
       <div class="formitem" style="margin:1rem 0 .5rem;font-size: 1rem">
-        <label>参数：</label><el-input v-model="params" placeholder="请输入内容"></el-input>
+        <label>参数：</label><el-input v-model="params" placeholder="参数1,参数2,参数3,...,参数n"></el-input>
+        <span style="font-size: .5rem;color: grey;margin-left: 10px">请按顺序输入参数，参数间用逗号","隔开</span>
       </div>
     </el-dialog>
   </div>
