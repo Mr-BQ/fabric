@@ -78,3 +78,15 @@ export function curchannel(){
         url:'/explorer/curchannel'
     },'get')
 }
+
+export function invoke(netname,chaincode,paramStr,invokeorg){
+    return request({
+        url:'/invoke',
+        params:{
+            netname,
+            chaincode,
+            paramStr,
+            invokeorg
+        }
+    },'post')
+}
