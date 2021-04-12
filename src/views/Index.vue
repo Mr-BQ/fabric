@@ -37,19 +37,10 @@
               <i class="el-icon-s-home"></i>
               <span slot="title">主页</span>
             </el-menu-item>
-            <el-submenu index="1">
-              <template slot="title">
-                <i class="el-icon-s-operation"></i>
-                <span>我的网络</span>
-              </template>
-              <el-menu-item v-for="(item,index) in networks" :key="index" :index="'/networks/'+item.name.split('_')[0]">
-                <i class="el-icon-menu"></i>
-                <span slot="title">{{item.name.split('_')[0]}}</span>
-              </el-menu-item>
-              <el-menu-item v-if="networks.length==0">
-                <span slot="title">暂无网络</span>
-              </el-menu-item>
-            </el-submenu>
+            <el-menu-item index="/networks">
+              <i class="el-icon-s-operation"></i>
+              <span slot="title">我的网络</span>
+            </el-menu-item>
             <el-menu-item index="/explorer">
               <i class="el-icon-coin"></i>
               <span slot="title">区块浏览器</span>
@@ -76,7 +67,7 @@
             </el-menu-item>
           </el-menu>
         </el-aside>
-        <el-main  v-loading="loading" element-loading-text="正在加载网络信息......">
+        <el-main  element-loading-text="正在加载网络信息......">
 <!--          <el-tabs v-model="editableTabsValue" type="card" closable @edit="handleTabsEdit">-->
 <!--            <el-tab-pane-->
 <!--                :key="item.name"-->
@@ -98,7 +89,7 @@
 </template>
 
 <script>
-import {getNetinfo} from "@/Network";
+
 
 export default {
   name: "Index",
@@ -110,7 +101,6 @@ export default {
       circleUrl:'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
       templates:[],
       networks:[],
-      loading:true
     }
   },
   methods: {
@@ -164,19 +154,19 @@ export default {
     }
   },
   beforeMount() {
-    getNetinfo().then(res=>{
-      this.loading = false
-      console.log(res);
-      if(res =='no net'){
-        this.networks = []
-      }else{
-        res.forEach(item=>{
-          if(item.Name.indexOf('_mininet')!==-1){
-            this.networks.push({name:item.Name,id:item.Id})
-          }
-        })
-      }
-    })
+    // getNetinfo().then(res=>{
+    //   this.loading = false
+    //   console.log(res);
+    //   if(res =='no net'){
+    //     this.networks = []
+    //   }else{
+    //     res.forEach(item=>{
+    //       if(item.Name.indexOf('_mininet')!==-1){
+    //         this.networks.push({name:item.Name,id:item.Id})
+    //       }
+    //     })
+    //   }
+    // })
   }
 }
 </script>
