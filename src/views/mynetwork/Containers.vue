@@ -5,7 +5,7 @@
       <div class="term">网络ID：<span>{{network && network.Id}}</span></div>
       <div class="term">创建时间：<span>{{network && dateString(new Date(this.network.Created),'yyyy-MM-dd hh:mm:ss')}}</span></div>
       <div class="option">
-        <el-button type="success" plain >启动所有节点</el-button>
+        <el-button type="success" plain @click="startall">启动所有节点</el-button>
         <el-button type="warning" plain @click="stopall">停止所有节点</el-button>
         <el-button type="primary" plain @click="ccdialogshow=true">安装链码</el-button>
         <el-button type="info" plain >重启网络</el-button>
@@ -128,6 +128,9 @@ name: "containers",
   },
   methods:{
     stopall(){
+      this.dialogtitle = ''
+      this.dialogcontent = '正在停止所有节点，请稍等...'
+      this.loading = true
       let tostop = []
       this.containers.forEach(item=>{
         if(item.State !== 'exited'){
@@ -137,6 +140,27 @@ name: "containers",
       })
       Promise.all(tostop).then(res=>{
         console.log(res);
+        this.$message.success('成功！')
+        this.loading = false
+        this.$router.replace('/refresh')
+      })
+    },
+    startall(){
+      this.dialogtitle = ''
+      this.dialogcontent = '正在启动所有节点，请稍等...'
+      this.loading = true
+      let tostart = []
+      this.containers.forEach(item=>{
+        if(item.State == 'exited'){
+          let promise = option(item.Id,1)
+          tostart.push(promise)
+        }
+      })
+      Promise.all(tostart).then(res=>{
+        console.log(res);
+        this.$message.success('成功！')
+        this.loading = false
+        this.$router.replace('/refresh')
       })
     },
     option(id,opt,index){
