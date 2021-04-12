@@ -5,10 +5,10 @@
       <div class="term">网络ID：<span>{{network && network.Id}}</span></div>
       <div class="term">创建时间：<span>{{network && dateString(new Date(this.network.Created),'yyyy-MM-dd hh:mm:ss')}}</span></div>
       <div class="option">
-        <el-button type="success" plain >启动网络</el-button>
+        <el-button type="success" plain >启动所有节点</el-button>
+        <el-button type="warning" plain @click="stopall">停止所有节点</el-button>
         <el-button type="primary" plain @click="ccdialogshow=true">安装链码</el-button>
         <el-button type="info" plain >重启网络</el-button>
-        <el-button type="warning" plain >拆除网络</el-button>
         <el-button type="danger" plain >清除节点和运行文件</el-button>
       </div>
     </el-card>
@@ -38,7 +38,14 @@
             <td style="width: 20%;text-align: center;">{{dateString(new Date(item.Created*1000),'yyyy-MM-dd hh:mm:ss')}}</td>
             <td style="width: 30%;text-align: center;"><a href="javascript:;" :title="item.Image">{{item.Image}}</a></td>
             <td style="width: 10%"><a href="javascript:;" :title="item.Id">{{item.Id}}</a></td>
-            <td style="width: 20%;text-align: center;">操作</td>
+            <td style="width: 20%;text-align: center;">
+              <div>
+                <el-button type="success" :disabled="!(item.State == 'exited')" @click="option(item.Id,1,index)" :loading="starting == index">启动</el-button>
+                <el-button type="danger" :disabled="item.State == 'exited'" @click="option(item.Id,0,index)" :loading="stopping == index">停止</el-button>
+                <el-button>更多信息</el-button>
+              </div>
+
+            </td>
           </tr>
         </tbody>
       </table>
@@ -98,7 +105,7 @@
 </template>
 
 <script>
-import {getNetinfo,getContainers,openexplorer,deploychaincode} from "@/Network";
+import {getNetinfo, getContainers, openexplorer, deploychaincode, option} from "@/Network";
 import {formatDate} from "@/utils";
 
 export default {
@@ -113,10 +120,50 @@ name: "containers",
       initFunc:'init',
       dialogtitle:'',
       dialogcontent:'正在打开区块浏览器...',
-      version:''
+      version:'',
+      starting:-1,
+      stopping:-1
+
     }
   },
   methods:{
+    stopall(){
+      let tostop = []
+      this.containers.forEach(item=>{
+        if(item.State !== 'exited'){
+          let promise = option(item.Id,0)
+          tostop.push(promise)
+        }
+      })
+      Promise.all(tostop).then(res=>{
+        console.log(res);
+      })
+    },
+    option(id,opt,index){
+      if(opt == 1){
+        this.starting = index
+      }else if(opt == 0){
+        this.stopping = index
+      }
+      option(id,opt).then(res=>{
+        this.starting = -1
+        this.stopping = -1
+        if(res == 'ok'){
+          if(opt == 1){
+            this.$message.success('启动成功！')
+          }else if(opt == 0){
+            this.$message.success('停止成功！')
+          }
+          this.$router.replace('/refresh')
+        }else{
+          if(opt == 1){
+            this.$message.error('启动失败！')
+          }else if(opt == 0){
+            this.$message.error('停止失败！')
+          }
+        }
+      })
+    },
     handleChange(file){
       if(this.fileList.length !== 0){
         this.fileList.pop()

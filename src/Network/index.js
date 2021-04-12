@@ -90,3 +90,20 @@ export function invoke(netname,chaincode,paramStr,invokeorg){
         }
     },'post')
 }
+
+export function test(){
+    return request({
+        url:'/test',
+        timeout:2000
+    },'get')
+}
+
+export function option(id,opt){
+    return request({
+        url:'/option',
+        params:{
+            container:id,
+            opt:opt
+        }
+    },'post')
+}

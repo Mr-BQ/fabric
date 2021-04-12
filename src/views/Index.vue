@@ -14,7 +14,7 @@
               <i class="el-icon-circle-plus-outline" style="font-size: 25px;line-height: 60px;cursor: pointer;color:#fff;"></i>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item>profile</el-dropdown-item>
-                <el-dropdown-item>log out</el-dropdown-item>
+                <el-dropdown-item @click.native="logout">log out</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </el-col>
@@ -114,6 +114,11 @@ export default {
     }
   },
   methods: {
+    logout(){
+      console.log('logout');
+      localStorage.removeItem('fabric-base-url')
+      location.reload();
+    },
     handleOpen(key, keyPath) {
       console.log(key, keyPath);
     },
