@@ -1,5 +1,5 @@
 <template>
-  <div class="mynetwork" :v-loading="loading">
+  <div class="mynetwork" v-loading="loading">
     <el-table
         :data="networks"
         style="width: 100%">

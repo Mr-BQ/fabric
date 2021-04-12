@@ -107,3 +107,21 @@ export function option(id,opt){
         }
     },'post')
 }
+
+export function getlogs(id){
+    return request({
+        url:'/getlogs',
+        params:{
+            id
+        }
+    },'get')
+}
+
+export function getinspect(id){
+    return request({
+        url:'/getinspect',
+        params:{
+            id
+        }
+    },'get')
+}

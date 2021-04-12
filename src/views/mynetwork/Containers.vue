@@ -42,6 +42,7 @@
               <div>
                 <el-button type="success" :disabled="!(item.State == 'exited')" @click="option(item.Id,1,index)" :loading="starting == index">启动</el-button>
                 <el-button type="danger" :disabled="item.State == 'exited'" @click="option(item.Id,0,index)" :loading="stopping == index">停止</el-button>
+                <el-button @click="showlogs(item,index)" :loading="gettinglogs == index">查看日志</el-button>
                 <el-button>更多信息</el-button>
               </div>
 
@@ -51,7 +52,15 @@
       </table>
     </el-card>
 
-
+    <el-dialog
+        class="logs"
+        :title="logtitle"
+        :visible.sync="logshow"
+        width="80%"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false">
+      <pre style="white-space: pre-wrap;">{{logs}}</pre>
+    </el-dialog>
 
     <el-dialog
         :title="dialogtitle"
@@ -105,7 +114,7 @@
 </template>
 
 <script>
-import {getNetinfo, getContainers, openexplorer, deploychaincode, option} from "@/Network";
+import {getNetinfo, getContainers, openexplorer, deploychaincode, option, getlogs} from "@/Network";
 import {formatDate} from "@/utils";
 
 export default {
@@ -122,11 +131,25 @@ name: "containers",
       dialogcontent:'正在打开区块浏览器...',
       version:'',
       starting:-1,
-      stopping:-1
+      stopping:-1,
+      logshow:false,
+      logtitle:'',
+      logs:'',
+      gettinglogs:-1
 
     }
   },
   methods:{
+    showlogs(item,index){
+      this.gettinglogs = index
+      getlogs(item.Id).then(res=>{
+        console.log(res);
+        this.logs = res
+        this.gettinglogs = -1
+        this.logtitle = '查看日志：' + item.Names[0].slice(1)
+        this.logshow = true
+      })
+    },
     stopall(){
       this.dialogtitle = ''
       this.dialogcontent = '正在停止所有节点，请稍等...'
