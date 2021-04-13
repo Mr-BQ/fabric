@@ -83,63 +83,64 @@
         width="50%"
         :close-on-click-modal="false"
     >
+      <div style="overflow-y: scroll;height: 50vh;">
         <div class="info">
           <div class="label">Transaction ID:</div>
           <div class="val">{{Txdetail.txhash}}</div>
         </div>
-      <div class="info">
-        <div class="label">Validation Code:</div>
-        <div class="val">{{Txdetail.validation_code}}</div>
-      </div>
-      <div class="info">
-        <div class="label">Payload Proposal Hash:</div>
-        <div class="val">{{Txdetail.payload_proposal_hash}}</div>
-      </div>
-      <div class="info">
-        <div class="label">Creator MSP:</div>
-        <div class="val">{{Txdetail.creator_msp_id}}</div>
-      </div>
-      <div class="info">
-        <div class="label">Endorser:</div>
-        <div class="val">{{Txdetail.endorser_msp_id}}</div>
-      </div>
-      <div class="info">
-        <div class="label">Channel:</div>
-        <div class="val">{{Txdetail.channelname}}</div>
-      </div>
-      <div class="info">
-        <div class="label">Chaincode Name:</div>
-        <div class="val">{{Txdetail.chaincodename}}</div>
-      </div>
-      <div class="info">
-        <div class="label">Type:</div>
-        <div class="val">{{Txdetail.type}}</div>
-      </div>
-      <div class="info">
-        <div class="label">Time:</div>
-        <div class="val">{{formatdate(new Date(Txdetail.createdt),'yyyy-MM-dd hh:mm:ss')}}</div>
-      </div>
-      <div class="info">
-        <div class="label">Reads:</div>
-        <div class="val">
-          <json-viewer
-              :value="Txdetail.read_set"
-              :expand-depth=5
-              :boxed="true">
-          </json-viewer>
+        <div class="info">
+          <div class="label">Validation Code:</div>
+          <div class="val">{{Txdetail.validation_code}}</div>
+        </div>
+        <div class="info">
+          <div class="label">Payload Proposal Hash:</div>
+          <div class="val">{{Txdetail.payload_proposal_hash}}</div>
+        </div>
+        <div class="info">
+          <div class="label">Creator MSP:</div>
+          <div class="val">{{Txdetail.creator_msp_id}}</div>
+        </div>
+        <div class="info">
+          <div class="label">Endorser:</div>
+          <div class="val">{{Txdetail.endorser_msp_id}}</div>
+        </div>
+        <div class="info">
+          <div class="label">Channel:</div>
+          <div class="val">{{Txdetail.channelname}}</div>
+        </div>
+        <div class="info">
+          <div class="label">Chaincode Name:</div>
+          <div class="val">{{Txdetail.chaincodename}}</div>
+        </div>
+        <div class="info">
+          <div class="label">Type:</div>
+          <div class="val">{{Txdetail.type}}</div>
+        </div>
+        <div class="info">
+          <div class="label">Time:</div>
+          <div class="val">{{formatdate(new Date(Txdetail.createdt),'yyyy-MM-dd hh:mm:ss')}}</div>
+        </div>
+        <div class="info">
+          <div class="label">Reads:</div>
+          <div class="val">
+            <json-viewer
+                :value="Txdetail.read_set"
+                :expand-depth=5
+                :boxed="true">
+            </json-viewer>
+          </div>
+        </div>
+        <div class="info">
+          <div class="label">Writes:</div>
+          <div class="val">
+            <json-viewer
+                :value="Txdetail.write_set"
+                :expand-depth=5
+                :boxed="true">
+            </json-viewer>
+          </div>
         </div>
       </div>
-      <div class="info">
-        <div class="label">Writes:</div>
-        <div class="val">
-          <json-viewer
-              :value="Txdetail.write_set"
-              :expand-depth=5
-              :boxed="true">
-          </json-viewer>
-        </div>
-      </div>
-
     </el-dialog>
   </div>
 </template>

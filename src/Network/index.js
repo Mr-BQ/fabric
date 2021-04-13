@@ -125,3 +125,29 @@ export function getinspect(id){
         }
     },'get')
 }
+
+export function netrestart(netname){
+    return request({
+        url:'/netrestart',
+        params:{
+            netname
+        }
+    },'get')
+}
+
+export function netcleanup(netname){
+    return request({
+        url:'/netcleanup',
+        params:{
+            netname
+        }
+    },'get')
+}
+
+export function portainerup(){
+    return request({
+        url:'/portainerup',
+    },'get')
+}
+
+

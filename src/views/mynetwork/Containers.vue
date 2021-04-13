@@ -5,11 +5,11 @@
       <div class="term">网络ID：<span>{{network && network.Id}}</span></div>
       <div class="term">创建时间：<span>{{network && dateString(new Date(this.network.Created),'yyyy-MM-dd hh:mm:ss')}}</span></div>
       <div class="option">
-        <el-button type="success" plain @click="startall">启动所有节点</el-button>
-        <el-button type="warning" plain @click="stopall">停止所有节点</el-button>
+        <el-button type="success" plain @click="startall">启动所有节点/容器</el-button>
+        <el-button type="warning" plain @click="stopall">停止所有节点/容器</el-button>
         <el-button type="primary" plain @click="ccdialogshow=true">安装链码</el-button>
-        <el-button type="info" plain >重启网络</el-button>
-        <el-button type="danger" plain >清除节点和运行文件</el-button>
+        <el-button type="info" plain @click="netrestart">重启网络</el-button>
+        <el-button type="danger" plain @click="alertopen">清除节点和运行文件</el-button>
       </div>
     </el-card>
 
@@ -20,9 +20,9 @@
         <thead>
           <tr>
             <th style="width: 20%">容器</th>
-            <th style="width: 10%">状态</th>
-            <th style="width: 20%">创建时间</th>
-            <th style="width: 30%">镜像</th>
+            <th style="width: 5%">状态</th>
+            <th style="width: 10%">创建时间</th>
+            <th style="width: 20%">镜像</th>
             <th style="width: 10%">容器ID</th>
             <th style="width: 20%">操作</th>
           </tr>
@@ -30,20 +30,20 @@
         <tbody>
           <tr v-for="(item,index) in containers" :key="index">
             <td style="width: 20%"><a href="javascript:;" :title="item.Names[0].slice(1)">{{item.Names[0].slice(1)}}</a></td>
-            <td style="width: 10%;text-align: center;">
+            <td style="width: 5%;text-align: center;">
               <el-tag type="success" effect="dark" v-if="item.State=='running' && item.Status.indexOf('healthy') != -1">healthy</el-tag>
               <el-tag type="success" effect="dark" v-else-if="item.State=='running'">running</el-tag>
               <el-tag type="danger" effect="dark" v-else>stopped</el-tag>
             </td>
-            <td style="width: 20%;text-align: center;">{{dateString(new Date(item.Created*1000),'yyyy-MM-dd hh:mm:ss')}}</td>
-            <td style="width: 30%;text-align: center;"><a href="javascript:;" :title="item.Image">{{item.Image}}</a></td>
+            <td style="width: 10%;text-align: center;">{{dateString(new Date(item.Created*1000),'yyyy-MM-dd hh:mm:ss')}}</td>
+            <td style="width: 20%;text-align: center;"><a href="javascript:;" :title="item.Image">{{item.Image}}</a></td>
             <td style="width: 10%"><a href="javascript:;" :title="item.Id">{{item.Id}}</a></td>
             <td style="width: 20%;text-align: center;">
               <div>
-                <el-button type="success" :disabled="!(item.State == 'exited')" @click="option(item.Id,1,index)" :loading="starting == index">启动</el-button>
-                <el-button type="danger" :disabled="item.State == 'exited'" @click="option(item.Id,0,index)" :loading="stopping == index">停止</el-button>
-                <el-button @click="showlogs(item,index)" :loading="gettinglogs == index">查看日志</el-button>
-                <el-button>更多信息</el-button>
+                <el-button size="mini" type="success" :disabled="isfobidden(item.Image) || !(item.State == 'exited')" @click="option(item.Id,1,index)" :loading="starting == index" >启动</el-button>
+                <el-button size="mini" type="danger" :disabled="isfobidden(item.Image) || item.State == 'exited'" @click="option(item.Id,0,index)" :loading="stopping == index">停止</el-button>
+                <el-button size="mini" @click="showlogs(item,index)" :loading="gettinglogs == index">查看日志</el-button>
+                <el-button size="mini" @click="showinspect(item,index)">更多信息</el-button>
               </div>
 
             </td>
@@ -59,7 +59,28 @@
         width="80%"
         :close-on-click-modal="false"
         :close-on-press-escape="false">
-      <pre style="white-space: pre-wrap;">{{logs}}</pre>
+      <el-input
+          type="textarea"
+          :rows="30"
+          readonly
+          v-model="logs">
+      </el-input>
+    </el-dialog>
+
+    <el-dialog
+        class="inspect"
+        :title="inspecttitle"
+        :visible.sync="inspectshow"
+        width="80%"
+        :close-on-click-modal="false"
+        :close-on-press-escape="false">
+      <div style="overflow-y: scroll;height: 50vh">
+        <json-viewer
+            :value="inspect"
+            :expand-depth=5
+            :boxed="true">
+        </json-viewer>
+      </div>
     </el-dialog>
 
     <el-dialog
@@ -102,6 +123,14 @@
           <label>链码初始化方法名：</label><el-input v-model="initFunc" placeholder="请输入内容"></el-input>
         </div>
         <div class="formitem" style="margin:1rem 0 .5rem;font-size: 1rem">
+          <label>链码开发语言：</label>
+          <el-select v-model="language" placeholder="请选择语言">
+            <el-option label="go" value="go" ></el-option>
+            <el-option label="java" value="java" ></el-option>
+            <el-option label="node" value="node" ></el-option>
+          </el-select>
+        </div>
+        <div class="formitem" style="margin:1rem 0 .5rem;font-size: 1rem">
           <label>版本：</label><el-input v-model="version" placeholder="请输入内容"></el-input>
         </div>
       </div>
@@ -114,7 +143,16 @@
 </template>
 
 <script>
-import {getNetinfo, getContainers, openexplorer, deploychaincode, option, getlogs} from "@/Network";
+import {
+  getNetinfo,
+  getContainers,
+  openexplorer,
+  deploychaincode,
+  option,
+  getlogs,
+  getinspect,
+  netrestart, netcleanup
+} from "@/Network";
 import {formatDate} from "@/utils";
 
 export default {
@@ -135,15 +173,78 @@ name: "containers",
       logshow:false,
       logtitle:'',
       logs:'',
-      gettinglogs:-1
+      gettinglogs:-1,
+      forbidden:['hyperledger/explorer-db','hyperledger/explorer','portainer/portainer-ce'],
+      inspecttitle:'',
+      inspectshow:false,
+      inspect:'',
+      gettinginspect:-1,
+      language:'go'
 
     }
   },
   methods:{
+    alertopen(){
+      this.$confirm('此操作将拆除该网络并删除相关文件, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        closeOnClickModal:false
+      }).then(() => {
+        this.netcleanup()
+      }).catch(() => {
+
+      });
+    },
+    netrestart(){
+      this.dialogtitle = ''
+      this.dialogcontent = '正在重启网络，请稍等...'
+      this.loading = true
+      netrestart(this.network.Name).then(res=>{
+        this.loading = false
+        if(res == 'ok'){
+          this.$message.success('重启成功！')
+          this.$router.replace('/refresh')
+        }else{
+          this.$message.error('失败！')
+        }
+      })
+    },
+    netcleanup(){
+      this.dialogtitle = ''
+      this.dialogcontent = '正在清除网络，请稍等...'
+      this.loading = true
+      netcleanup(this.network.Name).then(res=>{
+        this.loading = false
+        if(res == 'ok'){
+          this.$message.success('清除成功！')
+          this.$router.replace('/networks')
+        }else{
+          this.$message.error('失败！')
+        }
+      })
+    },
+    isfobidden(name){
+      name = name.split(':')[0]
+      if(this.forbidden.indexOf(name) !== -1){
+        return true
+      }else{
+        return false
+      }
+    },
+    showinspect(item,index){
+      this.gettinginspect = index
+      getinspect(item.Id).then(res=>{
+        this.inspect = res
+        this.gettinginspect = -1
+        this.inspecttitle = '查看详细信息：' + item.Names[0].slice(1)
+        this.inspectshow = true
+      })
+    },
     showlogs(item,index){
       this.gettinglogs = index
       getlogs(item.Id).then(res=>{
-        console.log(res);
+        // console.log(res);
         this.logs = res
         this.gettinglogs = -1
         this.logtitle = '查看日志：' + item.Names[0].slice(1)
@@ -156,7 +257,7 @@ name: "containers",
       this.loading = true
       let tostop = []
       this.containers.forEach(item=>{
-        if(item.State !== 'exited'){
+        if(!this.isfobidden(item.Image) && item.State !== 'exited'){
           let promise = option(item.Id,0)
           tostop.push(promise)
         }
@@ -174,7 +275,7 @@ name: "containers",
       this.loading = true
       let tostart = []
       this.containers.forEach(item=>{
-        if(item.State == 'exited'){
+        if(!this.isfobidden(item.Image) && item.State == 'exited'){
           let promise = option(item.Id,1)
           tostart.push(promise)
         }
@@ -229,6 +330,7 @@ name: "containers",
       form.append('netname',this.network.Name)
       form.append('initfunc',this.initFunc)
       form.append('version',this.version)
+      form.append('language',this.language)
       deploychaincode(form).then(res=>{
         console.log(res);
         this.loading = false

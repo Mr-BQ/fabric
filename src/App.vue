@@ -45,6 +45,7 @@ export default {
       test().then(res=>{
         if(res == 'success'){
           this.$message.success('连接成功！')
+          localStorage.setItem('fabric-ip',this.ip)
           this.showdialog = false
           location.reload();
         }else{
