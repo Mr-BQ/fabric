@@ -9,6 +9,11 @@
             <img src="../assets/view.svg" alt="" v-if="showip" @click="showip = !showip" style="width: 1.5rem">
             <img src="../assets/view_off.svg" alt="" v-else @click="showip = !showip" style="width: 1.5rem">
           </div>
+          <div style="display: flex;align-items: center;margin-top: .5rem">
+            <div style="height: 1rem;width: 1rem;background-color: #2ecc71;border-radius: 1rem;box-shadow: 0px 0px 4px 1px  #2ecc71" v-if="connected"></div>
+            <div style="height: 1rem;width: 1rem;background-color: #e74c3c;border-radius: 1rem;box-shadow: 0px 0px 4px 1px  #e74c3c" v-else></div>
+            <span style="margin-left: .5rem">{{connected?'连接正常':'连接失败'}}</span>
+          </div>
         </div>
       </el-card>
       <el-card class="box-card">
@@ -51,6 +56,7 @@
           <p class="paragraph">初次使用该平台，需设置后台ip地址，该ip会储存在本地，之后无需设置。可点击右上角“log out”清除本地储存的后台ip并重新设置。</p>
           <p class="paragraph">构建一个新网络所需时间较长，请耐心等待。</p>
           <p class="paragraph">容器管理服务大部分情况下处于开启状态，如果未开启，在打开“我的网络”模块时会自动开启。</p>
+          <p class="paragraph">如后台连接失败，请检查网络是否可用或后台是否开启。如后台ip已变更，请点击右上角“log out”清除本地储存的后台ip并重新设置。</p>
         </div>
       </el-card>
     </div>
@@ -58,16 +64,17 @@
 </template>
 
 <script>
-import {currentexolorer, getNetinfo, portainerup} from "@/Network";
+import {currentexolorer, getNetinfo, portainerup, test} from "@/Network";
 
 export default {
 name: "DashBoard",
   data(){
     return{
       showip:false,
-      portainerup:true,
-      explorer:'',
-      netcount:''
+      portainerup:false,
+      explorer:'未开启',
+      netcount:'0',
+      connected:false
     }
   },
   computed:{
@@ -99,6 +106,14 @@ name: "DashBoard",
 
     portainerup().then(res=>{
       this.portainerup = res
+    })
+
+    test().then(res=>{
+      if(res == 'success'){
+        this.connected = true
+      }else{
+        this.connected = false
+      }
     })
 
 
