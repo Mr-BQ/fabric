@@ -4,7 +4,7 @@
       <el-header class="header" style="height: 4rem">
         <el-row>
           <el-col :span="10" style="font-size: 1.2rem">
-            基于Hyperledger Fabric的区块链构建和监控平台
+            基于Hyperledger Fabric的区块链可视化管理平台
           </el-col>
           <el-col :span="1" :offset="12">
             <el-avatar :size="50" :src="circleUrl" class="avatar"></el-avatar>
