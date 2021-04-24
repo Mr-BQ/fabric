@@ -26,21 +26,6 @@ const routes = [
         component:() => import('@/views/Home')
       },
       {
-        path:'/newtemplate',
-        name:'NewTemplate',
-        component:() => import('@/views/NewTemplate')
-      },
-      {
-        path:'/upload',
-        name:'upload',
-        component:() => import('@/views/Upload')
-      },
-      {
-        path:'/newinstance',
-        name:'newinstance',
-        component:()=>import('@/views/NewInstance')
-      },
-      {
         path:'/buildnetwork',
         name:'buildnetwork',
         component:()=>import('@/views/BuildNetwork')
@@ -60,6 +45,21 @@ const routes = [
         name:'explorer',
         component:()=>import('@/views/explorer/Explorer')
       }
+      // {
+      //   path:'/upload',
+      //   name:'upload',
+      //   component:() => import('@/views/Upload')
+      // },
+      // {
+      //   path:'/newtemplate',
+      //   name:'NewTemplate',
+      //   component:() => import('@/views/NewTemplate')
+      // },
+      // {
+      //   path:'/newinstance',
+      //   name:'newinstance',
+      //   component:()=>import('@/views/NewInstance')
+      // },
 
     ],
     // route level code-splitting
