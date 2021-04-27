@@ -181,11 +181,11 @@ export default {
     }
   },
   beforeMount() {
-    let created_at
-    getNetinfo(this.$store.state.netname.split('_')[0]).then(res=>{
-      created_at = res.Created
-      created_at = new Date(created_at)
-      created_at.setDate(created_at.getDate() - 1)
+    let created_at = new Date("2021-01-01")
+    getNetinfo(this.$store.state.netname.split('_')[0]).then(()=>{
+      // created_at = res.Created
+      // created_at = new Date(created_at)
+      // created_at.setDate(created_at.getDate() - 1)
 
       curchannel().then(res=>{
         let curchannel = res

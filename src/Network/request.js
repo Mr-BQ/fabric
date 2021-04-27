@@ -4,7 +4,6 @@ export function request(config,method){
     let baseurl = localStorage.getItem('fabric-base-url')?localStorage.getItem('fabric-base-url'):'http://localhost:8888'
 
     const instance = axios.create({
-        // baseURL:'http://47.115.158.68:8888',
         baseURL:baseurl,
         method:method
     })
